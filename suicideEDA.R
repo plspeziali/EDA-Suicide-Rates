@@ -115,6 +115,11 @@ ggplot(data = stacked_data, aes(x = ind, y = values, fill = ind)) +
   scale_fill_manual(values = c("Male" = "lightblue", "Female" = "pink")) +
   theme_minimal()
 
+ggplot(data = sc_data_R, aes(x = factor(Year), y = Both)) +
+  geom_boxplot() +
+  labs(title = "Boxplot di Total per Anno",
+       x = "Anno", y = "Total") +
+  theme_minimal()
 
 
 
