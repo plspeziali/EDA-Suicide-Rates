@@ -121,5 +121,3 @@ ggplot(data = sc_data_R, aes(x = factor(Year), y = Both)) +
        x = "Anno", y = "Total") +
   theme_minimal()
 
-
-
