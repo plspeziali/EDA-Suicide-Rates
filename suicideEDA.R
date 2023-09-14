@@ -9,10 +9,14 @@ library(vioplot)
 library(sf)
 library(gridExtra)
 
+library(tidyverse)
+library(hrbrthemes)
+library(viridis)
+
 ## Changing Working Directory and Reading Dataset
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-sc_data <- read.csv("./dataset/suicide.csv", header = TRUE, sep = ",")
+sc_data <- read.csv("./dataset/suicide_crude.csv", header = TRUE, sep = ",")
 head(sc_data)
 names(sc_data)
 summary(sc_data)
@@ -34,12 +38,16 @@ length_of_Location <- length(sc_data_Location)
 sc_data_Dim1 <- unique(sc_data$Dim1.type)
 length_of_Dim1 <- length(sc_data_Dim1)
 # Dim1.type doesn't
-# We can remove all four
+
+sc_data_Dim2 <- unique(sc_data$Dim2.type)
+length_of_Dim2 <- length(sc_data_Dim2)
+# Dim1.type doesn't
+# We can remove all five
 
 # Remove uninteresting columns
 
 to_select <-
-  c("ParentLocation","Location","Period","Dim1","FactValueNumeric");
+  c("ParentLocation","Location","Period","IsLatestYear","Dim1","FactValueNumeric");
 
 sc_data_R <- sc_data[ , (names(sc_data) %in% to_select)]
 head(sc_data_R)
@@ -76,6 +84,37 @@ sc_data_R <- dcast(sc_data_R, WorldRegion + Country + Year ~ Sex, value.var = "V
 
 # Sort the dataset by WorldRegion + Country + Year
 sc_data_R <- sc_data_R[order(sc_data_R$WorldRegion, sc_data_R$Country, sc_data_R$Year), ]
+sc_data_R <- sc_data_R %>% rename(Both = 'Both sexes')
 
-# ** Exploratory Analisis Begin **
+# ** Exploratory Analysis Begin **
+
+# Hist of both sexes
+hist(sc_data_R$Both, breaks = 20, main = "Value distribution", xlab = "Value", cex.main = 1.15, cex.lab = 1.15)
+
+
+# Female/Male values boxplot for all years
+stacked_data <- stack(sc_data_R[c("Female", "Male")])
+ggplot(data = stacked_data, aes(x = ind, y = values, fill = ind)) +
+  geom_boxplot() +
+  labs(title = "Distribuzione di Female e Male",
+       x = "Sex",
+       y = "Value") +
+  scale_fill_manual(values = c("Male" = "lightblue", "Female" = "pink")) +
+  theme_minimal()
+
+# Female/Male values boxplot only for the latest year (2019)
+data_2019 <- sc_data_R[sc_data_R$Year == 2019, ]
+# stack features "Female" and "Male"
+stacked_data <- stack(data_2019[c("Female", "Male")])
+# Create Male/Female boxplot
+ggplot(data = stacked_data, aes(x = ind, y = values, fill = ind)) +
+  geom_boxplot() +
+  labs(title = "Distribuzione di Female e Male",
+       x = "Sex",
+       y = "Value") +
+  scale_fill_manual(values = c("Male" = "lightblue", "Female" = "pink")) +
+  theme_minimal()
+
+
+
 
