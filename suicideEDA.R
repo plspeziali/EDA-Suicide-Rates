@@ -252,20 +252,20 @@ if (ci_male$upper_ci < ci_female$lower_ci || ci_female$upper_ci < ci_male$lower_
   print("The confidence intervals overlap")
 }
 
-mean_male <- mean(sc_data_R$value[sc_data_R$Male])
-mean_female <- mean(sc_data_R$value[sc_data_R$Female])
+mean_male <- mean(sc_data_R$Male)
+mean_female <- mean(sc_data_R$Female)
 
 cat("Average of new cases per male:", mean_male, "\n")
 cat("Average of new cases per female:", mean_female, "\n")
 
-sd_male <- sd(sc_data_R$value[sc_data_R$Male])
-sd_female <- sd(sc_data_R$value[sc_data_R$Female])
+sd_male <- sd(sc_data_R$Male)
+sd_female <- sd(sc_data_R$Female)
 
 cat("Standard deviation of new cases for males:", sd_male, "\n")
 cat("Standard deviation of new cases for females:", sd_female, "\n")
 
-median_male <- median(sc_data_R$value[sc_data_R$Male])
-median_female <- median(sc_data_R$value[sc_data_R$Female])
+median_male <- median(sc_data_R$Male)
+median_female <- median(sc_data_R$Female)
 
 cat("Median of new cases per males:", median_male, "\n")
 cat("Median of new cases per females:", median_female, "\n")
@@ -275,13 +275,13 @@ percentage_difference <- ((mean_female - mean_male) / mean_male) * 100
 cat("Percentage difference in average new cases between males and females:", percentage_difference, "%\n")
 
 #Verifying normality
-qqnorm(sc_data_R$value[sc_data_R$Male])
-qqline(sc_data_R$value[sc_data_R$Male], col = "red")
-qqnorm(sc_data_R$value[sc_data_R$Female])
-qqline(sc_data_R$value[sc_data_R$Female], col = "red")
+qqnorm(sc_data_R$Male)
+qqline(sc_data_R$Male, col = "red")
+qqnorm(sc_data_R$Female)
+qqline(sc_data_R$Female, col = "red")
 
-shapiro_test_male <- shapiro.test(sc_data_R$value[sc_data_R$Male])
-shapiro_test_female <- shapiro.test(sc_data_R$value[sc_data_R$Female])
+shapiro_test_male <- shapiro.test(sc_data_R$Male)
+shapiro_test_female <- shapiro.test(sc_data_R$Female)
 
 print("verifying normality- Male:")
 print(shapiro_test_male)
