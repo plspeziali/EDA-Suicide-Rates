@@ -16,7 +16,7 @@ library(viridis)
 ## Changing Working Directory and Reading Dataset
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-sc_data <- read.csv("./dataset/suicide_crude.csv", header = TRUE, sep = ",")
+sc_data <- read.csv("./dataset/suicide.csv", header = TRUE, sep = ",")
 head(sc_data)
 names(sc_data)
 summary(sc_data)
@@ -39,10 +39,10 @@ sc_data_Dim1 <- unique(sc_data$Dim1.type)
 length_of_Dim1 <- length(sc_data_Dim1)
 # Dim1.type doesn't
 
-sc_data_Dim2 <- unique(sc_data$Dim2.type)
-length_of_Dim2 <- length(sc_data_Dim2)
-# Dim1.type doesn't
-# We can remove all five
+# sc_data_Dim2 <- unique(sc_data$Dim2.type)
+# length_of_Dim2 <- length(sc_data_Dim2)
+# # Dim1.type doesn't
+# # We can remove all five
 
 # Remove uninteresting columns
 
@@ -120,4 +120,40 @@ ggplot(data = sc_data_R, aes(x = factor(Year), y = Both)) +
   labs(title = "Boxplot di Total per Anno",
        x = "Anno", y = "Total") +
   theme_minimal()
+
+# ** Exploratory Analysis Begin **
+
+# Hist of both sexes
+hist(sc_data_R$Both, breaks = 20, main = "Value distribution", xlab = "Value", cex.main = 1.15, cex.lab = 1.15)
+
+
+# Female/Male values boxplot for all years
+stacked_data <- stack(sc_data_R[c("Female", "Male")])
+ggplot(data = stacked_data, aes(x = ind, y = values, fill = ind)) +
+  geom_boxplot() +
+  labs(title = "Distribuzione di Female e Male",
+       x = "Sex",
+       y = "Value") +
+  scale_fill_manual(values = c("Male" = "lightblue", "Female" = "pink")) +
+  theme_minimal()
+
+# Female/Male values boxplot only for the latest year (2019)
+data_2019 <- sc_data_R[sc_data_R$Year == 2019, ]
+# stack features "Female" and "Male"
+stacked_data <- stack(data_2019[c("Female", "Male")])
+# Create Male/Female boxplot
+ggplot(data = stacked_data, aes(x = ind, y = values, fill = ind)) +
+  geom_boxplot() +
+  labs(title = "Distribuzione di Female e Male",
+       x = "Sex",
+       y = "Value") +
+  scale_fill_manual(values = c("Male" = "lightblue", "Female" = "pink")) +
+  theme_minimal()
+
+ggplot(data = sc_data_R, aes(x = factor(Year), y = Both)) +
+  geom_boxplot() +
+  labs(title = "Boxplot di Total per Anno",
+       x = "Anno", y = "Total") +
+  theme_minimal()
+
 
