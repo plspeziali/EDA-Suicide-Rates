@@ -13,6 +13,8 @@ library(tidyverse)
 library(hrbrthemes)
 library(viridis)
 
+library(pgirmess)
+
 ## Changing Working Directory and Reading Dataset
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
@@ -230,62 +232,39 @@ print("\nShapiro-Wilk Test for Female:")
 print(shapiro_female)
 
 
-
-# Calculate confidence intervals for "Male"
-ci_male <- sc_data_R %>%
-  summarize(
-    lower_ci = t.test(Male)$conf.int[1],
-    upper_ci = t.test(Male)$conf.int[2]
-  )
-
-# Calculate confidence intervals for "Female"
-ci_female <- sc_data_R %>%
-  summarize(
-    lower_ci = t.test(Female)$conf.int[1],
-    upper_ci = t.test(Female)$conf.int[2]
-  )
-
-
-if (ci_male$upper_ci < ci_female$lower_ci || ci_female$upper_ci < ci_male$lower_ci) {
-  print("The confidence intervals do not overlap")
-} else {
-  print("The confidence intervals overlap")
-}
-
-mean_male <- mean(sc_data_R$Male)
-mean_female <- mean(sc_data_R$Female)
-
-cat("Average of new cases per male:", mean_male, "\n")
-cat("Average of new cases per female:", mean_female, "\n")
-
-sd_male <- sd(sc_data_R$Male)
-sd_female <- sd(sc_data_R$Female)
-
-cat("Standard deviation of new cases for males:", sd_male, "\n")
-cat("Standard deviation of new cases for females:", sd_female, "\n")
-
-median_male <- median(sc_data_R$Male)
-median_female <- median(sc_data_R$Female)
-
-cat("Median of new cases per males:", median_male, "\n")
-cat("Median of new cases per females:", median_female, "\n")
-
-percentage_difference <- ((mean_female - mean_male) / mean_male) * 100
-
-cat("Percentage difference in average new cases between males and females:", percentage_difference, "%\n")
-
 #Verifying normality
 qqnorm(sc_data_R$Male)
-qqline(sc_data_R$Male, col = "red")
+qqline(sc_data_R$Male)
 qqnorm(sc_data_R$Female)
-qqline(sc_data_R$Female, col = "red")
+qqline(sc_data_R$Female)
+qqnorm(sc_data_R$Both)
+qqline(sc_data_R$Both)
 
 shapiro_test_male <- shapiro.test(sc_data_R$Male)
 shapiro_test_female <- shapiro.test(sc_data_R$Female)
+shapiro_test_both <- shapiro.test(sc_data_R$Both)
 
 print("verifying normality- Male:")
 print(shapiro_test_male)
 print("verifying normality - Female:")
 print(shapiro_test_female)
+
+# Mann-Whitney U test to compare Male and Female across the entire dataset
+wilcox.test(sc_data_R$Male, sc_data_R$Female, paired = FALSE)
+
+
+# Kruskal-Wallis test to compare Male, Female, and Both
+kruskal.test(list(sc_data_R$Male, sc_data_R$Female, sc_data_R$Both))
+
+# Create a grouping factor for pairwise comparisons
+group <- rep(c("Male", "Female", "Both"), each = nrow(sc_data_R))
+
+# Perform pairwise Mann-Whitney U tests with Bonferroni correction
+pairwise.wilcox.test(sc_data_R$Both, group, p.adjust.method = "bonferroni")
+
+# Perform pairwise Mann-Whitney U tests with Benjamini-Hochberg correction
+pairwise.wilcox.test(sc_data_R$Both, group, p.adjust.method = "BH")
+
+
 
 
