@@ -252,6 +252,9 @@ print(shapiro_test_female)
 # Mann-Whitney U test to compare Male and Female across the entire dataset
 wilcox.test(sc_data_R$Male, sc_data_R$Female, paired = FALSE)
 
+# T test to compare Male and Female across the entire dataset
+t.test(sc_data_R$Male, sc_data_R$Female, paired = FALSE)
+
 
 # Kruskal-Wallis test to compare Male, Female, and Both
 kruskal.test(list(sc_data_R$Male, sc_data_R$Female, sc_data_R$Both))
