@@ -14,6 +14,7 @@ library(hrbrthemes)
 library(viridis)
 
 library(pgirmess)
+library(stats)
 
 ## Changing Working Directory and Reading Dataset
 
@@ -218,19 +219,7 @@ analyze_geographic_area(sc_data_R,"Europe")
 analyze_geographic_area(sc_data_R,"South-East Asia")
 analyze_geographic_area(sc_data_R,"Western Pacific")
 
-
-# Esegui il test di Shapiro-Wilk per la variabile "Male"
-shapiro_male <- shapiro.test(sc_data_R$Male)
-
-# Esegui il test di Shapiro-Wilk per la variabile "Female"
-shapiro_female <- shapiro.test(sc_data_R$Female)
-
-# Stampare i risultati dei test
-print("Shapiro-Wilk Test for Male:")
-print(shapiro_male)
-print("\nShapiro-Wilk Test for Female:")
-print(shapiro_female)
-
+## Hypothesis test for Sex values
 
 #Verifying normality
 qqnorm(sc_data_R$Male)
@@ -248,26 +237,80 @@ print("verifying normality- Male:")
 print(shapiro_test_male)
 print("verifying normality - Female:")
 print(shapiro_test_female)
+print("verifying normality- Both:")
+print(shapiro_test_both)
 
 # Mann-Whitney U test to compare Male and Female across the entire dataset
 wilcox.test(sc_data_R$Male, sc_data_R$Female, paired = FALSE)
 
-# T test to compare Male and Female across the entire dataset
-t.test(sc_data_R$Male, sc_data_R$Female, paired = FALSE)
+
+## Hypothesis test for Geographic Areas
+install.packages("PMCMRplus")
+library(PMCMRplus)
+
+analyze_single_country <- function(data, countryCode) {
+  
+  # Subset the data for the USA
+  cc_data <- data[data$CountryCode == countryCode, ]
+  
+  p1 <- ggplot(cc_data, aes(x = Year, y = Both)) +
+    geom_line() +
+    labs(
+      x = "Year",
+      y = "Suicide Rates (Both)",
+      title = paste("Trend of Suicide Rates in",cc_data$Country)
+    ) +
+    theme_minimal()
+  
+  print(p1)
+  
+  qqnorm(cc_data$Both)
+  qqline(cc_data$Both)
+  
+  shapiro_test_cc <- shapiro.test(cc_data$Both)
+  print(paste("verifying normality- Both in",countryCode))
+  print(shapiro_test_cc)
+  
+}
+
+# Americas
+analyze_single_country(sc_data_R,"USA")
+# Europe
+analyze_single_country(sc_data_R,"FIN")
+# Africa
+analyze_single_country(sc_data_R,"ZAF")
+# Western Pacific
+analyze_single_country(sc_data_R,"KOR")
+# South-East Asia
+analyze_single_country(sc_data_R,"PRK")
+# Eastern Mediterranean
+analyze_single_country(sc_data_R,"EGY")
 
 
-# Kruskal-Wallis test to compare Male, Female, and Both
-kruskal.test(list(sc_data_R$Male, sc_data_R$Female, sc_data_R$Both))
 
-# Create a grouping factor for pairwise comparisons
-group <- rep(c("Male", "Female", "Both"), each = nrow(sc_data_R))
-
-# Perform pairwise Mann-Whitney U tests with Bonferroni correction
-pairwise.wilcox.test(sc_data_R$Both, group, p.adjust.method = "bonferroni")
-
-# Perform pairwise Mann-Whitney U tests with Benjamini-Hochberg correction
-pairwise.wilcox.test(sc_data_R$Both, group, p.adjust.method = "BH")
+analyze_single_country(sc_data_R,"ITA")
 
 
 
+# Subset the data for the USA
+cc_data <- sc_data_R[sc_data_R$CountryCode == "USA", ]
+# If normal, use Anova
+cc_data$Year <- factor(cc_data$Year)
 
+anova_result <- aov(Year ~ Both + Error(Year/CountryCode), data = cc_data)
+# Print the ANOVA table
+summary(anova_result)
+
+
+
+# Filter the data for the specified countries
+selected_countries <- sc_data_R[sc_data_R$CountryCode %in% c("USA", "FIN", "ZAF", "KOR", "PRK", "EGY"), ]
+
+# Perform repeated measures ANOVA
+repeated_measures_anova <- aov(Both ~ Year + Error(CountryCode/Year), data = selected_countries)
+
+# Print the ANOVA results
+summary(repeated_measures_anova)
+
+library(lattice)
+bwplot(Both ~ Year | CountryCode, data = selected_countries)
