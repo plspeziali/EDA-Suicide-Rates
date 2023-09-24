@@ -81,19 +81,26 @@ sc_data_R <- dcast(sc_data_R, WorldRegion + Country + CountryCode + Year ~ Sex, 
 sc_data_R <- sc_data_R[order(sc_data_R$WorldRegion, sc_data_R$Country, sc_data_R$CountryCode, sc_data_R$Year), ]
 sc_data_R <- sc_data_R %>% rename(Both = 'Both sexes')
 
-selected_years <- c(2000,2003,2006,2009,2012,2015,2018)
-# Filter the data for the specified countries
-selected_countries <- sc_data_R %>%
-  filter(CountryCode %in% c("USA", "FIN", "ZAF", "KOR", "PRK", "EGY")) %>%
-  filter(Year %in% selected_years) %>%
-  select(CountryCode, Year, Both)
-
-# selected_years <- c(2000,2003,2006,2009,2012,2015,2018)
+# selected_years <- c(2013,2014,2015,2016,2017,2018,2019)
 # # Filter the data for the specified countries
 # selected_countries <- sc_data_R %>%
-#   filter(CountryCode %in% c("USA", "FIN", "JPN", "IRN", "PRK", "EGY")) %>%
+#   filter(CountryCode %in% c("GBR", "DEU", "FRA", "ITA", "ESP", "NLD")) %>%
 #   filter(Year %in% selected_years) %>%
 #   select(CountryCode, Year, Both)
+
+# selected_years <- c(2013,2014,2015,2016,2017,2018,2019)
+# # Filter the data for the specified countries
+# selected_countries <- sc_data_R %>%
+#   filter(CountryCode %in% c("USA", "DEU", "CHN", "NIG", "BRZ", "AUS")) %>%
+#   filter(Year %in% selected_years) %>%
+#   select(CountryCode, Year, Both)
+
+selected_years <- c(2013,2014,2015,2016,2017,2018,2019)
+# Filter the data for the specified countries
+selected_countries <- sc_data_R %>%
+  filter(CountryCode %in% c("KIR", "LKA", "RUS", "SOM", "GUY", "LSO")) %>%
+  filter(Year %in% selected_years) %>%
+  select(CountryCode, Year, Both)
 
 for (i in selected_years) {
   print(summary(selected_countries$Both[selected_countries$Year==i]))
@@ -153,10 +160,10 @@ for(i in 1:length(row_means)){
 
 
 library(lattice)
-bwplot(Both ~ Year | CountryCode, data = selected_countries)
+bwplot(Both ~ Year | CountryCode, data = selected_countries, scales = list(y = list(at = seq(0, 80, by = 5))))
 
 # Set up the plotting grid
-par(mfrow = c(3,3))
+par(mfrow = c(4,2))
 
 # Loop through each year
 for (year in selected_years) {
