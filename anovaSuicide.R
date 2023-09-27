@@ -6,6 +6,9 @@ library(ggplot2)
 library(tidyverse)
 library(hrbrthemes)
 library(viridis)
+library(reshape2)
+library(car)
+library(lattice)
 
 ## Changing Working Directory and Reading Dataset
 
@@ -81,37 +84,119 @@ sc_data_R <- dcast(sc_data_R, WorldRegion + Country + CountryCode + Year ~ Sex, 
 sc_data_R <- sc_data_R[order(sc_data_R$WorldRegion, sc_data_R$Country, sc_data_R$CountryCode, sc_data_R$Year), ]
 sc_data_R <- sc_data_R %>% rename(Both = 'Both sexes')
 
-# selected_years <- c(2013,2014,2015,2016,2017,2018,2019)
-# # Filter the data for the specified countries
-# selected_countries <- sc_data_R %>%
-#   filter(CountryCode %in% c("GBR", "DEU", "FRA", "ITA", "ESP", "NLD")) %>%
-#   filter(Year %in% selected_years) %>%
-#   select(CountryCode, Year, Both)
+selected_years <- c(2014,2015,2016,2017,2018,2019)
 
-# selected_years <- c(2013,2014,2015,2016,2017,2018,2019)
-# # Filter the data for the specified countries
-# selected_countries <- sc_data_R %>%
-#   filter(CountryCode %in% c("USA", "DEU", "CHN", "NIG", "BRZ", "AUS")) %>%
-#   filter(Year %in% selected_years) %>%
-#   select(CountryCode, Year, Both)
-
-selected_years <- c(2013,2014,2015,2016,2017,2018,2019)
 # Filter the data for the specified countries
-selected_countries <- sc_data_R %>%
-  filter(CountryCode %in% c("KIR", "LKA", "RUS", "SOM", "GUY", "LSO")) %>%
+selected_countries_1 <- sc_data_R %>%
+  filter(CountryCode %in% c("USA", "DEU", "CHN", "SAU", "NGA", "IND")) %>%
   filter(Year %in% selected_years) %>%
   select(CountryCode, Year, Both)
+
+
+# Filter the data for the specified countries
+selected_countries_2 <- sc_data_R %>%
+  filter(CountryCode %in% c("GBR", "DEU", "FRA", "ITA", "ESP", "NLD")) %>%
+  filter(Year %in% selected_years) %>%
+  select(CountryCode, Year, Both)
+
+
+# Filter the data for the specified countries
+selected_countries_3 <- sc_data_R %>%
+  filter(CountryCode %in% c("KIR", "BWA", "RUS", "GUY", "SWZ", "LSO")) %>%
+  filter(Year %in% selected_years) %>%
+  select(CountryCode, Year, Both)
+
+
+# Filter the data for the specified countries
+selected_countries_4 <- sc_data_R %>%
+  filter(CountryCode %in% c("LSO", "GUY", "RUS", "SOM", "LKA", "KIR")) %>%
+  filter(Year %in% selected_years) %>%
+  select(CountryCode, Year, Both)
+
+
+selected_countries_5 <- sc_data_R %>%
+  group_by(WorldRegion, Year) %>%
+  filter(Year %in% selected_years) %>%
+  summarize(Mean_Both = mean(Both))
+
+colnames(selected_countries_5) <- c("CountryCode", "Year", "Both")
+
+selected_countries <- selected_countries_4
 
 for (i in selected_years) {
   print(summary(selected_countries$Both[selected_countries$Year==i]))
 }
 
-boxplot(selected_countries$Both ~ selected_countries$Year, 
-        xlab="Year",
-        ylab="Suicide Rate")
+custom_colors <- c("#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f", "#e5c494")
+
+
+ggplot(selected_countries, aes(x = as.factor(Year), y = Both, fill = as.factor(Year))) +
+  geom_boxplot(color = "#1f78b4", alpha = 0.7) +
+  labs(x = "Year", y = "Suicide Rate") +
+  scale_fill_manual(values = custom_colors) +  # Use the custom color palette
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.grid.major = element_blank(),  # Remove major grid lines
+        panel.grid.minor = element_blank(),  # Remove minor grid lines
+        panel.background = element_blank(),  # Remove panel background
+        axis.line = element_line(colour = "black"),  # Add axis lines
+        plot.title = element_text(hjust = 0.5)) +  # Centered plot title
+  ggtitle("Suicide Rate by Year") +  # Add a title
+  guides(fill = FALSE)  # Remove the legend
+
+# Define a custom color palette with six colors
+custom_colors <- c("#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f")
+
+ggplot(selected_countries, aes(x = as.factor(CountryCode), y = Both, fill = CountryCode)) +
+  geom_boxplot(color = "#1f78b4", alpha = 0.7) +
+  labs(x = "Year", y = "Suicide Rate") +
+  scale_fill_manual(values = custom_colors) +  # Use the custom color palette
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.grid.major = element_blank(),  # Remove major grid lines
+        panel.grid.minor = element_blank(),  # Remove minor grid lines
+        panel.background = element_blank(),  # Remove panel background
+        axis.line = element_line(colour = "black"),  # Add axis lines
+        plot.title = element_text(hjust = 0.5)) +  # Centered plot title
+  ggtitle("Suicide Rate by Country") +  # Add a title
+  guides(fill = FALSE)  # Remove the legend
+
+
+
+# Create a ggplot object with your dataset
+ggplot(data = selected_countries_1, aes(x = Year, y = Both, group = CountryCode, color = CountryCode)) +
+  geom_line() +
+  labs(x = "Year", y = "Suicide Rate", title = "Trend of Suicide Rate by Country (First Group)") +
+  theme_minimal()
+
+# Create a ggplot object with your dataset
+ggplot(data = selected_countries_2, aes(x = Year, y = Both, group = CountryCode, color = CountryCode)) +
+  geom_line() +
+  labs(x = "Year", y = "Suicide Rate", title = "Trend of Suicide Rate by Country (Second Group)") +
+  theme_minimal()
+
+# Create a ggplot object with your dataset
+ggplot(data = selected_countries_3, aes(x = Year, y = Both, group = CountryCode, color = CountryCode)) +
+  geom_line() +
+  labs(x = "Year", y = "Suicide Rate", title = "Trend of Suicide Rate by Country (Third Group)") +
+  theme_minimal()
+
+# Create a ggplot object with your dataset
+ggplot(data = selected_countries_4, aes(x = Year, y = Both, group = CountryCode, color = CountryCode)) +
+  geom_line() +
+  labs(x = "Year", y = "Suicide Rate", title = "Trend of Suicide Rate by Country (Fourth Group)") +
+  theme_minimal()
+
+# Create a ggplot object with your dataset
+ggplot(data = selected_countries_5, aes(x = Year, y = Both, group = CountryCode, color = CountryCode)) +
+  geom_line() +
+  labs(x = "Year", y = "Suicide Rate", title = "Trend of Mean Suicide Rate by WorldRegion (Fifth Group)") +
+  theme_minimal()
+
+
 
 # trasforma variabili in factors (v. qualitative)
-country <- as.factor(selected_countries$Country)
+country <- as.factor(selected_countries$CountryCode)
 year    <- as.factor(selected_countries$Year)
 
 
@@ -158,12 +243,10 @@ for(i in 1:length(row_means)){
   }
 }
 
-
-library(lattice)
 bwplot(Both ~ Year | CountryCode, data = selected_countries, scales = list(y = list(at = seq(0, 80, by = 5))))
 
 # Set up the plotting grid
-par(mfrow = c(4,2))
+par(mfrow = c(2,3))
 
 # Loop through each year
 for (year in selected_years) {
@@ -171,10 +254,10 @@ for (year in selected_years) {
   year_data <- table_data[, c("CountryCode", year)]
   
   # Create a QQ-plot for the current year
-  qqnorm(unlist(year_data[, -1]), main = paste("QQ-Plot for Year", year))
+  qqnorm(unlist(year_data[, -1]), main = paste("QQ-Plot for Year", year), cex.main = 1.2, cex.lab = 1.3)
   
   # Add a Q-line to the QQ-plot
-  qqline(unlist(year_data[, -1]), col = "red")
+  qqline(unlist(year_data[, -1]), col = "red", cex = 1.3)
 }
 
 # Create an empty data frame to store the Shapiro-Wilk test results
@@ -194,6 +277,13 @@ for (year in 2:ncol(table_data)) {
 
 # Print the Shapiro-Wilk test results
 print(shapiro_results)
+
+# Perform Bartlett's test
+bartlett.test(Both ~ Year, data = selected_countries)
+
+# Perform Levene's Test
+leveneTest(Both ~ as.factor(Year), data = selected_countries)
+
 
 anova_result <- aov(Both ~ Year + Error(CountryCode/Year), data = selected_countries)
 

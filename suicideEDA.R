@@ -100,11 +100,12 @@ hist(sc_data_R$Both, breaks = 20, main = "Value distribution", xlab = "Value", c
 stacked_data <- stack(sc_data_R[c("Female", "Male")])
 ggplot(data = stacked_data, aes(x = ind, y = values, fill = ind)) +
   geom_boxplot() +
-  labs(title = "Distribuzione di Female e Male",
+  labs(title = "Distribution of values by Sex",
        x = "Sex",
        y = "Value") +
   scale_fill_manual(values = c("Male" = "lightblue", "Female" = "pink")) +
-  theme_minimal()
+  theme_minimal() +  # Add a title
+  guides(fill = FALSE)  # Remove the legend
 
 # Female/Male values boxplot only for the latest year (2019)
 data_2019 <- sc_data_R[sc_data_R$Year == 2019, ]
@@ -121,8 +122,8 @@ ggplot(data = stacked_data, aes(x = ind, y = values, fill = ind)) +
 
 ggplot(data = sc_data_R, aes(x = factor(Year), y = Both)) +
   geom_boxplot() +
-  labs(title = "Boxplot di Total per Anno",
-       x = "Anno", y = "Total") +
+  labs(title = "Distribution of Both values by Year",
+       x = "Year", y = "Both") +
   theme_minimal()
 
 mean_gender <- sc_data_R %>%
@@ -134,14 +135,30 @@ ggplot(mean_gender, aes(x = Year)) +
   geom_line(aes(y = Mean_Male, color = "Male")) +
   geom_line(aes(y = Mean_Female, color = "Female")) +
   labs(
-    title = "Trend of Mean Suicide Percentages Over the Years",
+    title = "Trend of Mean Suicide Rates Over the Years",
     x = "Year",
-    y = "Mean Suicide Percentage",
-    color = "Gender"
+    y = "Mean Suicide Rate",
+    color = "Sex"
   ) +
   scale_color_manual(values = c("Both" = "black", "Male" = "blue", "Female" = "red")) +
   theme_minimal() +
   ylim(0, 25)  # Set the y-axis limits
+
+top_10_countries <- sc_data_R %>%
+  group_by(CountryCode) %>%
+  summarise(AvgBoth = mean(Both)) %>%
+  arrange(desc(AvgBoth)) %>%
+  head(10)
+
+top_10_countries$CountryCode <- factor(top_10_countries$CountryCode, levels = rev(top_10_countries$CountryCode))
+
+ggplot(top_10_countries, aes(x = CountryCode, y = AvgBoth, fill = CountryCode)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Country", y = "Average Both Value") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none") +
+  ggtitle("Average Both Value by Country (Top 10)")
 
 
 mean_wc <- sc_data_R %>%
@@ -163,7 +180,7 @@ ggplot(data = data_2019, aes(x = WorldRegion, y = Mean_Both, fill = WorldRegion)
   geom_bar(stat = "identity") +
   labs(title = "Istogramma di 'both' per 'WorldRegion' (2019)",
        x = "WorldRegion",
-       y = "Value") +
+       y = "Both") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
@@ -192,20 +209,21 @@ analyze_geographic_area <- function(data, area_name) {
   
   print(p1)
   
-  mean_country <- data_area %>%
-    group_by(Country, CountryCode) %>%
-    summarize(Mean_Both = mean(Both))# %>%
-    #filter(Mean_Both > 15) %>%
-    #slice(1:25) %>%
-    #arrange(desc(Mean_Both))
+  # Assuming your dataset is named "sc_data_R"
+  top_10_countries <- data_area %>%
+    group_by(Country) %>%
+    summarise(AvgBoth = mean(Both)) %>%
+    arrange(desc(AvgBoth))
   
-  p2 <- ggplot(data = mean_country, aes(x = reorder(CountryCode, -Mean_Both), y = Mean_Both, fill = CountryCode)) +
+  top_10_countries$CountryCode <- factor(top_10_countries$Country, levels = rev(top_10_countries$Country))
+  
+  p2 <- ggplot(top_10_countries, aes(x = Country, y = AvgBoth, fill = Country)) +
     geom_bar(stat = "identity") +
-    labs(title = paste("Istogramma di 'both' per", area_name),
-         x = "WorldRegion",
-         y = "Value") +
+    labs(x = "Country", y = "Average Both Value") +
     theme_minimal() +
-    theme(legend.position = "none", axis.text.x = element_text(angle = 45, hjust = 1))
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          legend.position = "none") +
+    ggtitle("Average Both Value by Country (Top 10)")
   
   print(p2)
   
@@ -219,98 +237,98 @@ analyze_geographic_area(sc_data_R,"Europe")
 analyze_geographic_area(sc_data_R,"South-East Asia")
 analyze_geographic_area(sc_data_R,"Western Pacific")
 
-## Hypothesis test for Sex values
-
-#Verifying normality
-qqnorm(sc_data_R$Male)
-qqline(sc_data_R$Male)
-qqnorm(sc_data_R$Female)
-qqline(sc_data_R$Female)
-qqnorm(sc_data_R$Both)
-qqline(sc_data_R$Both)
-
-shapiro_test_male <- shapiro.test(sc_data_R$Male)
-shapiro_test_female <- shapiro.test(sc_data_R$Female)
-shapiro_test_both <- shapiro.test(sc_data_R$Both)
-
-print("verifying normality- Male:")
-print(shapiro_test_male)
-print("verifying normality - Female:")
-print(shapiro_test_female)
-print("verifying normality- Both:")
-print(shapiro_test_both)
-
-# Mann-Whitney U test to compare Male and Female across the entire dataset
-wilcox.test(sc_data_R$Male, sc_data_R$Female, paired = FALSE)
-
-
-## Hypothesis test for Geographic Areas
-install.packages("PMCMRplus")
-library(PMCMRplus)
-
-analyze_single_country <- function(data, countryCode) {
-  
-  # Subset the data for the USA
-  cc_data <- data[data$CountryCode == countryCode, ]
-  
-  p1 <- ggplot(cc_data, aes(x = Year, y = Both)) +
-    geom_line() +
-    labs(
-      x = "Year",
-      y = "Suicide Rates (Both)",
-      title = paste("Trend of Suicide Rates in",cc_data$Country)
-    ) +
-    theme_minimal()
-  
-  print(p1)
-  
-  qqnorm(cc_data$Both)
-  qqline(cc_data$Both)
-  
-  shapiro_test_cc <- shapiro.test(cc_data$Both)
-  print(paste("verifying normality- Both in",countryCode))
-  print(shapiro_test_cc)
-  
-}
-
-# Americas
-analyze_single_country(sc_data_R,"USA")
-# Europe
-analyze_single_country(sc_data_R,"FIN")
-# Africa
-analyze_single_country(sc_data_R,"ZAF")
-# Western Pacific
-analyze_single_country(sc_data_R,"KOR")
-# South-East Asia
-analyze_single_country(sc_data_R,"PRK")
-# Eastern Mediterranean
-analyze_single_country(sc_data_R,"EGY")
-
-
-
-analyze_single_country(sc_data_R,"ITA")
-
-
-
-# Subset the data for the USA
-cc_data <- sc_data_R[sc_data_R$CountryCode == "USA", ]
-# If normal, use Anova
-cc_data$Year <- factor(cc_data$Year)
-
-anova_result <- aov(Year ~ Both + Error(Year/CountryCode), data = cc_data)
-# Print the ANOVA table
-summary(anova_result)
-
-
-
-# Filter the data for the specified countries
-selected_countries <- sc_data_R[sc_data_R$CountryCode %in% c("USA", "FIN", "ZAF", "KOR", "PRK", "EGY"), ]
-
-# Perform repeated measures ANOVA
-repeated_measures_anova <- aov(Both ~ Year + Error(CountryCode/Year), data = selected_countries)
-
-# Print the ANOVA results
-summary(repeated_measures_anova)
-
-library(lattice)
-bwplot(Both ~ Year | CountryCode, data = selected_countries)
+# ## Hypothesis test for Sex values
+# 
+# #Verifying normality
+# qqnorm(sc_data_R$Male)
+# qqline(sc_data_R$Male)
+# qqnorm(sc_data_R$Female)
+# qqline(sc_data_R$Female)
+# qqnorm(sc_data_R$Both)
+# qqline(sc_data_R$Both)
+# 
+# shapiro_test_male <- shapiro.test(sc_data_R$Male)
+# shapiro_test_female <- shapiro.test(sc_data_R$Female)
+# shapiro_test_both <- shapiro.test(sc_data_R$Both)
+# 
+# print("verifying normality- Male:")
+# print(shapiro_test_male)
+# print("verifying normality - Female:")
+# print(shapiro_test_female)
+# print("verifying normality- Both:")
+# print(shapiro_test_both)
+# 
+# # Mann-Whitney U test to compare Male and Female across the entire dataset
+# wilcox.test(sc_data_R$Male, sc_data_R$Female, paired = FALSE)
+# 
+# 
+# ## Hypothesis test for Geographic Areas
+# install.packages("PMCMRplus")
+# library(PMCMRplus)
+# 
+# analyze_single_country <- function(data, countryCode) {
+#   
+#   # Subset the data for the USA
+#   cc_data <- data[data$CountryCode == countryCode, ]
+#   
+#   p1 <- ggplot(cc_data, aes(x = Year, y = Both)) +
+#     geom_line() +
+#     labs(
+#       x = "Year",
+#       y = "Suicide Rates (Both)",
+#       title = paste("Trend of Suicide Rates in",cc_data$Country)
+#     ) +
+#     theme_minimal()
+#   
+#   print(p1)
+#   
+#   qqnorm(cc_data$Both)
+#   qqline(cc_data$Both)
+#   
+#   shapiro_test_cc <- shapiro.test(cc_data$Both)
+#   print(paste("verifying normality- Both in",countryCode))
+#   print(shapiro_test_cc)
+#   
+# }
+# 
+# # Americas
+# analyze_single_country(sc_data_R,"USA")
+# # Europe
+# analyze_single_country(sc_data_R,"FIN")
+# # Africa
+# analyze_single_country(sc_data_R,"ZAF")
+# # Western Pacific
+# analyze_single_country(sc_data_R,"KOR")
+# # South-East Asia
+# analyze_single_country(sc_data_R,"PRK")
+# # Eastern Mediterranean
+# analyze_single_country(sc_data_R,"EGY")
+# 
+# 
+# 
+# analyze_single_country(sc_data_R,"ITA")
+# 
+# 
+# 
+# # Subset the data for the USA
+# cc_data <- sc_data_R[sc_data_R$CountryCode == "USA", ]
+# # If normal, use Anova
+# cc_data$Year <- factor(cc_data$Year)
+# 
+# anova_result <- aov(Year ~ Both + Error(Year/CountryCode), data = cc_data)
+# # Print the ANOVA table
+# summary(anova_result)
+# 
+# 
+# 
+# # Filter the data for the specified countries
+# selected_countries <- sc_data_R[sc_data_R$CountryCode %in% c("USA", "FIN", "ZAF", "KOR", "PRK", "EGY"), ]
+# 
+# # Perform repeated measures ANOVA
+# repeated_measures_anova <- aov(Both ~ Year + Error(CountryCode/Year), data = selected_countries)
+# 
+# # Print the ANOVA results
+# summary(repeated_measures_anova)
+# 
+# library(lattice)
+# bwplot(Both ~ Year | CountryCode, data = selected_countries)

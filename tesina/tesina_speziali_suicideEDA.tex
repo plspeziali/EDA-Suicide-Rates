@@ -11,7 +11,7 @@
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
 
-\title{Analisi esplorativa del tasso di suicidi in diversi paesi tra il 2013 e il 2019\\
+\title{Analisi esplorativa del tasso di suicidi in diversi paesi tra il 2014 e il 2019\\
 {\footnotesize Tesina di Data Science for Health Systems}
 }
 
@@ -27,12 +27,12 @@ paolo.speziali@studenti.unipg.it}
 \begin{abstract}
 Questo documento riporta i risultati dell'analisi esplorativa del dataset fornito dalla
 World Health Organization relativo al tasso di mortalità per suicidio standardizzato per età.
-L'obiettivo di questa analisi è quello di esaminare se, in differenti paesi tra il 2013 e il 2019,
+L'obiettivo di questa analisi è quello di esaminare se, in differenti paesi tra il 2014 e il 2019,
 la distribuzione del tasso di suicidi sia significativamente differente o meno,
 aprendo la strada a potenziali
 ipotesi su fenomeni globali che possano averne influenzato la tendenza.
 Tramite l'analisi di tre gruppi distinti è possibile osservare come una
-distribuzione comune, in alcuni casi, emerga.
+distribuzione comune emerga solo in pochi casi.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -51,14 +51,14 @@ di solito non ci sono grandi fluttuazioni. Si è tentati di affermare che
 il miglior predittore del tasso di suicidi nel breve periodo è il tasso di suicidi del passato.
 Tuttavia, nel lungo periodo possono verificarsi e si sono verificati grandi cambiamenti''.
 Nello studio che segue andremo ad osservare i cambiamenti nel tasso di suicidio 
-a livello mondiale tra il 2013 e il 2019 e verificare se è possibile affermare
+a livello mondiale tra il 2014 e il 2019 e verificare se è possibile affermare
 che non esistono differenze significative nella distribuzione tassi di suicidio
 tra paesi differenti.
 
 
 \section{Dataset}
 
-\subsection{Descrizione del Dataset}
+\subsection{Descrizione del dataset}
 
 Il dataset utilizzato proviene dal portale web della World Health Organization (WHO)
 ed ha come titolo ``Age-standardized suicide rates (per 100000 population)''\cite{b4}.
@@ -74,204 +74,321 @@ sulla causa dei decessi.
 Il dataset originale si compone di 10980 campioni e 34 feature,
 di cui molte con valori totalmente nulli o non importati ai fini della nostra analisi.
 
-\subsection{Modellazione del Dataset}
+\subsection{Modellazione del dataset}
 
 Prima di iniziare con l'analisi esplorativa il dataset è stato ridotto di
 dimensione andando a prendere unicamente le feature d'interesse qui di seguito
 riportate:
 \begin{itemize}
-    \item 
+    \item \textbf{ParentLocation}, rinominato in \textbf{WorldRegion}: 
+    indica l'area geografica a cui appartiene il paese relativo al dato
+    in esame secondo la divisione fatta dal WHO;
+    \item \textbf{SpatialDimValueCode}, rinominato in \textbf{CountryCode}: 
+    indica il codice a tre lettere maiuscole associato al paese relativo
+    al dato in esame (es. Italia sarà associato ad ITA);
+    \item \textbf{Location}, rinominato in \textbf{Country}: 
+    indica il nome del paese  relativo al dato in esame;
+    \item \textbf{Period}, rinominato in \textbf{Year}: 
+    anno in cui è stato registrato il dato in esame;
+    \item \textbf{Dim1}, rinominato in \textbf{Sex}: 
+    indica il sesso (Male, Female o Both Sexes)
+    relativo al dato in esame;
+    \item \textbf{FactValueNumeric}, rinominato in \textbf{Value}: 
+    tasso di suicidi registrato per quel sesso in quell'anno e in quel paese;
 \end{itemize}
-
-\section{Prepare Your Paper Before Styling}
-Before you begin to format your paper, first write and save the content as a 
-separate text file. Complete all content and organizational editing before 
-formatting. Please note sections \ref{AA}--\ref{SCM} below for more information on 
-proofreading, spelling and grammar.
-
-Keep your text and graphic files separate until after the text has been 
-formatted and styled. Do not number text heads---{\LaTeX} will do that 
-for you.
-
-\subsection{Abbreviations and Acronyms}\label{AA}
-Define abbreviations and acronyms the first time they are used in the text, 
-even after they have been defined in the abstract. Abbreviations such as 
-IEEE, SI, MKS, CGS, ac, dc, and rms do not have to be defined. Do not use 
-abbreviations in the title or heads unless they are unavoidable.
-
-\subsection{Units}
+Con le colonne sopracitate selezionate nel dataset non sono presenti
+valori nulli o non significativi.
+Successivamente il dataset è stato nuovamente modificato per
+avere un'unica entry per ogni anno relativo a un paese, suddividendo la feature Sex
+in tre feature diverse contenenti ognuna il valore associato nel campo Value,
+la struttura finale è di seguito riportata:
 \begin{itemize}
-\item Use either SI (MKS) or CGS as primary units. (SI units are encouraged.) English units may be used as secondary units (in parentheses). An exception would be the use of English units as identifiers in trade, such as ``3.5-inch disk drive''.
-\item Avoid combining SI and CGS units, such as current in amperes and magnetic field in oersteds. This often leads to confusion because equations do not balance dimensionally. If you must use mixed units, clearly state the units for each quantity that you use in an equation.
-\item Do not mix complete spellings and abbreviations of units: ``Wb/m\textsuperscript{2}'' or ``webers per square meter'', not ``webers/m\textsuperscript{2}''. Spell out units when they appear in text: ``. . . a few henries'', not ``. . . a few H''.
-\item Use a zero before decimal points: ``0.25'', not ``.25''. Use ``cm\textsuperscript{3}'', not ``cc''.)
+    \item \textbf{WorldRegion};
+    \item \textbf{CountryCode};
+    \item \textbf{Country};
+    \item \textbf{Year};
+    \item \textbf{Male}: Value associato al tasso di suicidio maschile;
+    \item \textbf{Female}: Value associato al tasso di suicidio femminile;
+    \item \textbf{Both}: Value associato al tasso di suicidio di entrambi i sessi;
 \end{itemize}
 
-\subsection{Equations}
-Number equations consecutively. To make your 
-equations more compact, you may use the solidus (~/~), the exp function, or 
-appropriate exponents. Italicize Roman symbols for quantities and variables, 
-but not Greek symbols. Use a long dash rather than a hyphen for a minus 
-sign. Punctuate equations with commas or periods when they are part of a 
-sentence, as in:
-\begin{equation}
-a+b=\gamma\label{eq}
-\end{equation}
+\section{Analisi esplorativa}
 
-Be sure that the 
-symbols in your equation have been defined before or immediately following 
-the equation. Use ``\eqref{eq}'', not ``Eq.~\eqref{eq}'' or ``equation \eqref{eq}'', except at 
-the beginning of a sentence: ``Equation \eqref{eq} is . . .''
+In questa sezione di analisi esplorativa dei dati (EDA) andremo dapprima
+ad analizzare tramite strumenti di visualizzazione dei dati il quadro generale
+della situazione per poi soffermarci su cinque gruppi di ``soggetti''.
+Vedremo in seguito con quale criterio sono stati selezionati e a quali
+conclusioni ci permettono di arrivare.
 
-\subsection{\LaTeX-Specific Advice}
+\subsection{Il quadro generale}
 
-Please use ``soft'' (e.g., \verb|\eqref{Eq}|) cross references instead
-of ``hard'' references (e.g., \verb|(1)|). That will make it possible
-to combine sections, add equations, or change the order of figures or
-citations without having to go through the file line by line.
-
-Please don't use the \verb|{eqnarray}| equation environment. Use
-\verb|{align}| or \verb|{IEEEeqnarray}| instead. The \verb|{eqnarray}|
-environment leaves unsightly spaces around relation symbols.
-
-Please note that the \verb|{subequations}| environment in {\LaTeX}
-will increment the main equation counter even when there are no
-equation numbers displayed. If you forget that, you might write an
-article in which the equation numbers skip from (17) to (20), causing
-the copy editors to wonder if you've discovered a new method of
-counting.
-
-{\BibTeX} does not work by magic. It doesn't get the bibliographic
-data from thin air but from .bib files. If you use {\BibTeX} to produce a
-bibliography you must send the .bib files. 
-
-{\LaTeX} can't read your mind. If you assign the same label to a
-subsubsection and a table, you might find that Table I has been cross
-referenced as Table IV-B3. 
-
-{\LaTeX} does not have precognitive abilities. If you put a
-\verb|\label| command before the command that updates the counter it's
-supposed to be using, the label will pick up the last counter to be
-cross referenced instead. In particular, a \verb|\label| command
-should not go before the caption of a figure or a table.
-
-Do not use \verb|\nonumber| inside the \verb|{array}| environment. It
-will not stop equation numbers inside \verb|{array}| (there won't be
-any anyway) and it might stop a wanted equation number in the
-surrounding equation.
-
-\subsection{Some Common Mistakes}\label{SCM}
-\begin{itemize}
-\item The word ``data'' is plural, not singular.
-\item The subscript for the permeability of vacuum $\mu_{0}$, and other common scientific constants, is zero with subscript formatting, not a lowercase letter ``o''.
-\item In American English, commas, semicolons, periods, question and exclamation marks are located within quotation marks only when a complete thought or name is cited, such as a title or full quotation. When quotation marks are used, instead of a bold or italic typeface, to highlight a word or phrase, punctuation should appear outside of the quotation marks. A parenthetical phrase or statement at the end of a sentence is punctuated outside of the closing parenthesis (like this). (A parenthetical sentence is punctuated within the parentheses.)
-\item A graph within a graph is an ``inset'', not an ``insert''. The word alternatively is preferred to the word ``alternately'' (unless you really mean something that alternates).
-\item Do not use the word ``essentially'' to mean ``approximately'' or ``effectively''.
-\item In your paper title, if the words ``that uses'' can accurately replace the word ``using'', capitalize the ``u''; if not, keep using lower-cased.
-\item Be aware of the different meanings of the homophones ``affect'' and ``effect'', ``complement'' and ``compliment'', ``discreet'' and ``discrete'', ``principal'' and ``principle''.
-\item Do not confuse ``imply'' and ``infer''.
-\item The prefix ``non'' is not a word; it should be joined to the word it modifies, usually without a hyphen.
-\item There is no period after the ``et'' in the Latin abbreviation ``et al.''.
-\item The abbreviation ``i.e.'' means ``that is'', and the abbreviation ``e.g.'' means ``for example''.
-\end{itemize}
-An excellent style manual for science writers is \cite{b7}.
-
-\subsection{Authors and Affiliations}
-\textbf{The class file is designed for, but not limited to, six authors.} A 
-minimum of one author is required for all conference articles. Author names 
-should be listed starting from left to right and then moving down to the 
-next line. This is the author sequence that will be used in future citations 
-and by indexing services. Names should not be listed in columns nor group by 
-affiliation. Please keep your affiliations as succinct as possible (for 
-example, do not differentiate among departments of the same organization).
-
-\subsection{Identify the Headings}
-Headings, or heads, are organizational devices that guide the reader through 
-your paper. There are two types: component heads and text heads.
-
-Component heads identify the different components of your paper and are not 
-topically subordinate to each other. Examples include Acknowledgments and 
-References and, for these, the correct style to use is ``Heading 5''. Use 
-``figure caption'' for your Figure captions, and ``table head'' for your 
-table title. Run-in heads, such as ``Abstract'', will require you to apply a 
-style (in this case, italic) in addition to the style provided by the drop 
-down menu to differentiate the head from the text.
-
-Text heads organize the topics on a relational, hierarchical basis. For 
-example, the paper title is the primary text head because all subsequent 
-material relates and elaborates on this one topic. If there are two or more 
-sub-topics, the next level head (uppercase Roman numerals) should be used 
-and, conversely, if there are not at least two sub-topics, then no subheads 
-should be introduced.
-
-\subsection{Figures and Tables}
-\paragraph{Positioning Figures and Tables} Place figures and tables at the top and 
-bottom of columns. Avoid placing them in the middle of columns. Large 
-figures and tables may span across both columns. Figure captions should be 
-below the figures; table heads should appear above the tables. Insert 
-figures and tables after they are cited in the text. Use the abbreviation 
-``Fig.~\ref{fig}'', even at the beginning of a sentence.
-
-\begin{table}[htbp]
-\caption{Table Type Styles}
-\begin{center}
-\begin{tabular}{|c|c|c|c|}
-\hline
-\textbf{Table}&\multicolumn{3}{|c|}{\textbf{Table Column Head}} \\
-\cline{2-4} 
-\textbf{Head} & \textbf{\textit{Table column subhead}}& \textbf{\textit{Subhead}}& \textbf{\textit{Subhead}} \\
-\hline
-copy& More table copy$^{\mathrm{a}}$& &  \\
-\hline
-\multicolumn{4}{l}{$^{\mathrm{a}}$Sample of a Table footnote.}
-\end{tabular}
-\label{tab1}
-\end{center}
-\end{table}
-
+Inizialmente è stata studiata la distribuzione dei valori Sex rispetto
+al sesso (Male e Female) di appartenenza tramite il boxplot in Fig.~\ref{1sex}.
 \begin{figure}[htbp]
-\centerline{\includegraphics{fig1.png}}
-\caption{Example of a figure caption.}
-\label{fig}
+    \centerline{\includegraphics[width=.5\textwidth]{img/1 - Sex.png}}
+    \caption{Boxplot della distribuzione dei valori rispetto al sesso}
+    \label{1sex}
+\end{figure}
+In questo modo è possibile apprezzare come esista una notevole differenza
+nella distribuzione tra i sessi: è evidente come i soggetti maschili siano
+i più colpiti da questo fenomeno.
+Ciò è apprezzabile anche andando a vedere il trend globale dei valori medi
+dei tassi di suicidio ogni anno in Fig.~\ref{2globtrend}: il trend maschile
+si trova su valori significativamente più alti rispetto a quello femminile,
+il trend di Both si pone, prevedibilmente, a cavallo tra i due.
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=.5\textwidth]{img/2 - Globtrend.png}}
+    \caption{Lineplot del trend dei suicidi medi globali ogni anno}
+    \label{2globtrend}
+\end{figure}
+Un'ulteriore osservazione che è possibile fare è
+che, nonostante il trend globale sia in declino, non c'è una differenza
+particolarmente significativa da anno ad anno. Possiamo apprezzare meglio
+ciò osservando la distribuzione dei valori anno per anno tramite il boxplot
+in Fig.~\ref{3boxyears}.
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=.5\textwidth]{img/3 - Boxyears.png}}
+    \caption{Boxplot della distribuzione dei valori tra gli anni}
+    \label{3boxyears}
+\end{figure}
+La differenza tra un anno gli adiacenti è poca ma esiste, nel corso del ventennio
+in esame infatti la distribuzione cambia notevolmente.
+Andiamo infine ad analizzare il trend del tasso dei suicidi medio suddiviso
+per regione del mondo secondo la divisione del WHO in Fig.~\ref{4wrtrend}.
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=.5\textwidth]{img/4 - WRTrend.png}}
+    \caption{Lineplot del trend dei suicidi medi ogni anno suddiviso per regione globale}
+    \label{4wrtrend}
+\end{figure}
+Possiamo vedere come ci sia in tutte le regioni un trend comune di declino e persino
+alcuni trend di crescita e decrescita comuni (ad esempio nel 2008-2009).
+A questo punto ci si potrebbe chiedere se alcuni gruppi
+di paesi o persino le regioni globali vadano a condividere, anno per anno,
+la stessa distribuzione di tassi di suicidi. Andiamo ora ad analizzare
+un primo gruppo, formato dalle sei regioni globali e dalle loro medie annuali
+e poi tre gruppi formati ognuno da sei paesi differenti selezionati con diversi criteri.
+Per semplificare l'analisi e ridurre il numero di grafici verranno presi in esame solo
+gli anni dal 2014 al 2019.
+
+\subsection{Primo gruppo - Regioni globali (WR)}
+Utilizziamo il Box and Whisker Plot (BWPlot) in Fig.~\ref{5firstgroup} per visualizzare il
+valor medio di Both in ogni regione del mondo, anno per anno.
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=.5\textwidth]{img/5 - Firstgroup.png}}
+    \caption{BWPlot della media di Both anno per anno in ogni regione}
+    \label{5firstgroup}
+\end{figure}
+Già dalla figura è possibile vedere che, a parte il declino globale, non viene seguito
+un vero e proprio trend comune.
+Tramite gli otto QQ-Plot in Fig.~\ref{6firstqq}, uno per anno, si può osservare come sia
+molto probabile che la media dei dati raccolti ogni anno seguano una distribuzione normale.
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=.5\textwidth]{img/6 - Firstqq.png}}
+    \caption{QQ-Plot dei valori medi di Both negli anni presi in esame}
+    \label{6firstqq}
 \end{figure}
 
-Figure Labels: Use 8 point Times New Roman for Figure labels. Use words 
-rather than symbols or abbreviations when writing Figure axis labels to 
-avoid confusing the reader. As an example, write the quantity 
-``Magnetization'', or ``Magnetization, M'', not just ``M''. If including 
-units in the label, present them within parentheses. Do not label axes only 
-with units. In the example, write ``Magnetization (A/m)'' or ``Magnetization 
-\{A[m(1)]\}'', not just ``A/m''. Do not label axes with a ratio of 
-quantities and units. For example, write ``Temperature (K)'', not 
-``Temperature/K''.
+\subsection{Secondo gruppo - Paese con PIL più alto per WR}
 
-\section*{Acknowledgment}
+I paesi individuati come quelli con il PIL maggiore \cite{b6} per la WR
+d'appartenenza nel 2019 sono:
+\begin{itemize}
+    \item \textbf{United States of America} (USA) per Americas;
+    \item \textbf{Germany} (DEU) per Europe;
+    \item \textbf{China} (CHN) per Western Pacific;
+    \item \textbf{Saudi Arabia} (SAU) per Eastern Mediterranean;
+    \item \textbf{Nigeria} (NGA) per Africa;
+    \item \textbf{India} (IND) per South-East Asia. 
+\end{itemize}
+Dati questi paesi osserviamo il BWPlot relativo in Fig.~\ref{7secondgroup}.
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=.5\textwidth]{img/7 - Secondgroup.png}}
+    \caption{BWPlot di Both anno per anno in ogni paese (2° gruppo)}
+    \label{7secondgroup}
+\end{figure}
+Qua un trend comune è già più probabile, andremo a verificarlo in seguito.
+Tramite gli otto QQ-Plot in Fig.~\ref{8secondqq}, uno per anno, si può osservare come, anche qua,
+sia molto probabile che i dati raccolti ogni anno seguano una distribuzione normale.
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=.5\textwidth]{img/8 - Secondqq.png}}
+    \caption{QQ-Plot dei valori Both negli anni presi in esame (2° gruppo)}
+    \label{8secondqq}
+\end{figure}
 
-The preferred spelling of the word ``acknowledgment'' in America is without 
-an ``e'' after the ``g''. Avoid the stilted expression ``one of us (R. B. 
-G.) thanks $\ldots$''. Instead, try ``R. B. G. thanks$\ldots$''. Put sponsor 
-acknowledgments in the unnumbered footnote on the first page.
 
-\section*{References}
+\subsection{Terzo gruppo - Paesi con tasso di suicidio più alto in assoluto}
 
-Please number citations consecutively within brackets \cite{b1}. The 
-sentence punctuation follows the bracket \cite{b2}. Refer simply to the reference 
-number, as in \cite{b3}---do not use ``Ref. \cite{b3}'' or ``reference \cite{b3}'' except at 
-the beginning of a sentence: ``Reference \cite{b3} was the first $\ldots$''
+I paesi individuati come quelli con il tasso di suicidio più alto
+in assoluto sono:
+\begin{itemize}
+    \item \textbf{Lesotho} (LSO);
+    \item \textbf{Guyana} (GUY);
+    \item \textbf{Russian Federation} (RUS);
+    \item \textbf{Eswatini} (SWZ);
+    \item \textbf{Botswana} (BWA);
+    \item \textbf{Kiribati} (KIR); 
+\end{itemize}
+Dati questi paesi osserviamo il BWPlot relativo in Fig.~\ref{9thridgroup}.
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=.5\textwidth]{img/9 - Thirdgroup.png}}
+    \caption{BWPlot di Both anno per anno in ogni paese (3° gruppo)}
+    \label{9thridgroup}
+\end{figure}
+Qua è difficile individuare un trend comune.
+Nei QQ-Plot in Fig.~\ref{10thirdqq} vediamo come i dati non saranno
+probabilmente distribuiti normalmente negli anni.
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=.5\textwidth]{img/10 - Thirdqq.png}}
+    \caption{QQ-Plot dei valori Both negli anni presi in esame (3° gruppo)}
+    \label{10thirdqq}
+\end{figure}
 
-Number footnotes separately in superscripts. Place the actual footnote at 
-the bottom of the column in which it was cited. Do not put footnotes in the 
-abstract or reference list. Use letters for table footnotes.
+\subsection{Quarto gruppo - Paesi con tasso di suicidio più alto per WR}
 
-Unless there are six authors or more give all authors' names; do not use 
-``et al.''. Papers that have not been published, even if they have been 
-submitted for publication, should be cited as ``unpublished'' \cite{b4}. Papers 
-that have been accepted for publication should be cited as ``in press'' \cite{b5}. 
-Capitalize only the first word in a paper title, except for proper nouns and 
-element symbols.
+I paesi individuati come quelli con il tasso di suicidio più alto per la
+WR d'appartenenza sono:
+\begin{itemize}
+    \item \textbf{Lesotho} (LSO) per Africa;
+    \item \textbf{Guyana} (GUY) per Americas;
+    \item \textbf{Russian Federation} (RUS) per Europe;
+    \item \textbf{Somalia} (SOM) per Eastern Mediterranean;
+    \item \textbf{Sri Lanka} (LKA) per South-East Asia;
+    \item \textbf{Kiribati} (KIR) per Western Pacific; 
+\end{itemize}
+Dati questi paesi osserviamo il BWPlot relativo in Fig.~\ref{11fourthgroup}.
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=.5\textwidth]{img/11 - Fourthgroup.png}}
+    \caption{BWPlot di Both anno per anno in ogni paese (4° gruppo)}
+    \label{11fourthgroup}
+\end{figure}
+Qua un trend comune è già più probabile, andremo a verificarlo in seguito.
+Nei QQ-Plot in Fig.~\ref{12fourthqq} vediamo come i dati non saranno
+probabilmente distribuiti normalmente negli anni.
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=.5\textwidth]{img/12 - Fourthqq.png}}
+    \caption{QQ-Plot dei valori Both negli anni presi in esame (4° gruppo)}
+    \label{12fourthqq}
+\end{figure}
 
-For papers published in translation journals, please give the English 
-citation first, followed by the original foreign-language citation \cite{b6}.
+\section{Test statistici}
+
+Vogliamo verificare che, all'interno dei gruppi selezionati,
+in ogni anno i dati raccolti provengano dalla stessa distribuzione.
+Per fare ciò la scelta primaria è l'ANOVA a misure ripetute,
+tuttavia è necessario andare a verificare la normalità,
+l'omochedasticità e la sfericità delle misure, in caso
+anche una sola di queste assunzioni non venga rispettata occorre
+ripiegare sul test non parametrico di Friedman.
+
+\subsection{Verifica della normalità}
+
+Le supposizioni sulla normalità dei dati vengono confermate
+con il test di Shapiro-Wilk, i cui p-value vengono riportati nella Tab.~\ref{tab1}.
+Solo i primi due gruppi presi in esame infatti rispettano il vincolo della normalità
+in quanto hanno tutti i p-value dei test relativi ai loro anni superiori al valore di 0.05.
+\begin{table}[htbp]
+    \caption{Test di Shapiro-Wilk}
+    \begin{center}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Gruppo}&\multicolumn{6}{|c|}{\textbf{Anni}} \\
+    \cline{2-7} 
+     & \textbf{2014} & \textbf{2015} & \textbf{2016} & \textbf{2017} & \textbf{2018} & \textbf{2019}\\
+    \hline
+    \textbf{Gruppo 1} & 0.531 & 0.672 & 0.690 & 0.705 & 0.708 & 0.719 \\\cline{1-7}
+    \textbf{Gruppo 2} & 0.913 & 0.824 & 0.804 & 0.832 & 0.746 & 0.569 \\\cline{1-7}
+    \textbf{Gruppo 3} & 0.018 & 0.011 & 0.017 & 0.026 & 0.021 & 0.056 \\\cline{1-7}
+    \textbf{Gruppo 4} & 0.015 & 0.011 & 0.018 & 0.037 & 0.046 & 0.071 \\\cline{1-7}
+    \hline
+    \end{tabular}
+    \label{tab1}
+    \end{center}
+\end{table}
+
+\subsection{Verifica dell'omoschedasticità}
+
+In quanto solo i primi due gruppi hanno dati distribuiti secondo una distribuzione normale
+andremo ad utilizzare il test di Bartlett solo su questi due, i risultati,
+riportati in Tab.~\ref{tab2} mostrano come entrambi rispettino l'omoschedasticità.
+\begin{table}[htbp]
+    \caption{Test di Bartlett}
+    \begin{center}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Gruppo} & \textbf{K-squared} & \textbf{p-value} \\
+    \hline
+    \textbf{Gruppo 1} & 0.27014 & 0.9982 \\\cline{1-3}
+    \textbf{Gruppo 2} & 0.39744 & 0.9954 \\\cline{1-3}
+    \hline
+    \end{tabular}
+    \label{tab2}
+    \end{center}
+\end{table}
+
+Discorso analogo possiamo fare per gli ultimi due gruppi per cui è stato utilizzato il test di
+Levene, più robusto rispetto a Bartlett nel caso di allontanamento dalla normalità,
+come si può vedere in Tab.~\ref{tab3} anche loro sono omoschedastici.
+\begin{table}[htbp]
+    \caption{Test di Levene}
+    \begin{center}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Gruppo} & \textbf{F-value} & \textbf{p-value} \\
+    \hline
+    \textbf{Gruppo 3} & 0.037 & 0.9992 \\\cline{1-3}
+    \textbf{Gruppo 4} & 0.016 & 0.9999 \\\cline{1-3}
+    \hline
+    \end{tabular}
+    \label{tab3}
+    \end{center}
+\end{table}
+
+\subsection{Verifica della sfericità}
+
+Utilizzando la statistica di Greenhouse-Geisser verifichiamo che nessuno dei quattro gruppi
+soddisfa la sfericità in quanto i loro valori $\varepsilon$, riportati in Tab.~\ref{tab4},
+si allontanano troppo da 1.
+\begin{table}[htbp]
+    \caption{Statistica di Greenhouse-Geisser}
+    \begin{center}
+    \begin{tabular}{|c|c|}
+    \hline
+    \textbf{Gruppo} & $\boldsymbol{\varepsilon}$\\
+    \hline
+    \textbf{Gruppo 1} & 0.2067 \\\cline{1-2}
+    \textbf{Gruppo 2} & 0.2280 \\\cline{1-2}
+    \textbf{Gruppo 3} & 0.2122 \\\cline{1-2}
+    \textbf{Gruppo 4} & 0.2028 \\\cline{1-2}
+    \hline
+    \end{tabular}
+    \label{tab4}
+    \end{center}
+\end{table}
+Possiamo però pensare di utilizzare comunque ANOVA per i primi due gruppi
+che soddisfano sia normalità che omoschedasticità, almeno per vedere
+se essa conferma Friedman o meno (in ogni caso, sarà Friedman ad avere l'ultima parola).
+
+\subsection{Test di Friedman}
+
+Per i vari gruppi riportiamo, nella Tab.~\ref{tab5}, i risultati del test di Friedman.
+\begin{table}[htbp]
+    \caption{Test di Friedman}
+    \begin{center}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Gruppo} & $\boldsymbol{\chi}$\textbf{-squared} & \textbf{p-value} \\
+    \hline
+    \textbf{Gruppo 1} & 26.19 & 8.196$\times 10^{-5}$ \\\cline{1-3}
+    \textbf{Gruppo 2} & 10.762 & 0.05631 \\\cline{1-3}
+    \textbf{Gruppo 3} & 13.143 & 0.02208 \\\cline{1-3}
+    \textbf{Gruppo 4} & 8.2857 & 0.1412 \\\cline{1-3}
+    \hline
+    \end{tabular}
+    \label{tab5}
+    \end{center}
+\end{table}
+
+
 
 \begin{thebibliography}{00}
     \bibitem{b1} Shneidman ES. ``The definition of suicide''. New York, NY and London: John Wiley and sons; 1985.
@@ -279,6 +396,7 @@ citation first, followed by the original foreign-language citation \cite{b6}.
     \bibitem{b3} Värnik, P. ``Suicide in the world''. Int. J. Environ. Res. Public Health 2012, 9, 760-771. https://doi.org/10.3390/ijerph9030760 
     \bibitem{b4} World Health Organization. (2023). ``Suicide rates''. Recuperato da https://www.who.int/data/gho/data/themes/mental-health/suicide-rates
     \bibitem{b5} Statistics Canada. (2023). ``Age-standardized rates''. Recuperato da https://www.statcan.gc.ca/en/dai/btd/asr
+    \bibitem{b6} countryeconomy.com. (2023). ``GDP - Gross Domestic Product 2019''. Recuperato da https://countryeconomy.com/gdp?year=2019
 \end{thebibliography}
 
 \end{document}
