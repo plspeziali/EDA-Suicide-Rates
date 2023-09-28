@@ -7,6 +7,7 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{float}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
@@ -132,15 +133,17 @@ al sesso (Male e Female) di appartenenza tramite il boxplot in Fig.~\ref{1sex}.
 In questo modo è possibile apprezzare come esista una notevole differenza
 nella distribuzione tra i sessi: è evidente come i soggetti maschili siano
 i più colpiti da questo fenomeno.
-Ciò è apprezzabile anche andando a vedere il trend globale dei valori medi
-dei tassi di suicidio ogni anno in Fig.~\ref{2globtrend}: il trend maschile
-si trova su valori significativamente più alti rispetto a quello femminile,
-il trend di Both si pone, prevedibilmente, a cavallo tra i due.
+
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=.5\textwidth]{img/2 - Globtrend.png}}
     \caption{Lineplot del trend dei suicidi medi globali ogni anno}
     \label{2globtrend}
 \end{figure}
+Ciò è apprezzabile anche andando a vedere il trend globale dei valori medi
+dei tassi di suicidio ogni anno in Fig.~\ref{2globtrend}: il trend maschile
+si trova su valori significativamente più alti rispetto a quello femminile,
+il trend di Both si pone, prevedibilmente, a cavallo tra i due.
+
 Un'ulteriore osservazione che è possibile fare è
 che, nonostante il trend globale sia in declino, non c'è una differenza
 particolarmente significativa da anno ad anno. Possiamo apprezzare meglio
@@ -155,16 +158,20 @@ La differenza tra un anno gli adiacenti è poca ma esiste, nel corso del ventenn
 in esame infatti la distribuzione cambia notevolmente.
 Andiamo infine ad analizzare il trend del tasso dei suicidi medio suddiviso
 per regione del mondo secondo la divisione del WHO in Fig.~\ref{4wrtrend}.
+
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=.5\textwidth]{img/4 - WRTrend.png}}
     \caption{Lineplot del trend dei suicidi medi ogni anno suddiviso per regione globale}
     \label{4wrtrend}
 \end{figure}
+
 Possiamo vedere come ci sia in tutte le regioni un trend comune di declino e persino
 alcuni trend di crescita e decrescita comuni (ad esempio nel 2008-2009).
 A questo punto ci si potrebbe chiedere se alcuni gruppi
 di paesi o persino le regioni globali abbiano
-distribuzioni di tassi di suicidi senza differenze significative. Andiamo ora ad analizzare
+distribuzioni di tassi di suicidi senza differenze significative.
+
+Andiamo ora ad analizzare
 un primo gruppo, formato dalle sei regioni globali e dalle loro medie annuali
 e poi tre gruppi formati ognuno da sei paesi differenti selezionati con diversi criteri.
 Per semplificare l'analisi e ridurre il numero di grafici verranno presi in esame solo
@@ -286,7 +293,8 @@ ripiegare sul test non parametrico di Friedman.
 
 Le supposizioni sulla normalità dei dati vengono confermate
 con il test di Shapiro-Wilk, i cui p-value vengono riportati nella Tab.~\ref{tab1}.
-Solo i primi due gruppi presi in esame infatti rispettano il vincolo della normalità
+Solo i primi due gruppi presi in esame (gruppo delle medie delle WR e dei paesi con PIL più alto per WR)
+infatti rispettano il vincolo della normalità
 in quanto hanno tutti i p-value dei test relativi ai loro anni superiori al valore di 0.05.
 \begin{table}[htbp]
     \caption{Test di Shapiro-Wilk}
@@ -368,7 +376,8 @@ si allontanano troppo da 1.
 \end{table}
 Possiamo però pensare di utilizzare comunque ANOVA per i primi due gruppi
 che soddisfano sia normalità che omoschedasticità, almeno per vedere
-se essa conferma Friedman o meno (in ogni caso, sarà Friedman ad avere l'ultima parola).
+se essa conferma Friedman o meno (in ogni caso, sarà il test di Friedman
+quello che considereremo significativo).
 
 \subsection{Test di Friedman}
 
@@ -389,7 +398,10 @@ Per i vari gruppi riportiamo, nella Tab.~\ref{tab5}, i risultati del test di Fri
     \label{tab5}
     \end{center}
 \end{table}
-Possiamo osservare come solo nel secondo e quarto gruppo il p-value supera il valore di 0.05
+Possiamo osservare come solo nel secondo e quarto gruppo 
+(ovvero quello dei paesi con PIL più alto per WR e paesi con
+suicidio più alto per WR)
+il p-value supera il valore di 0.05
 e quindi possiamo accettare l'ipotesi nulla, ovvero quella per cui non esistono differenze
 statistiche significative all'interno di tali gruppi.
 Ciò andrebbe a confermare quel che si poteva leggermente intuire dai BWPlot mostrati per questi
@@ -399,7 +411,8 @@ anno, il p-value è molto più basso rispetto agli altri, indice che
 le differenze significative esistono. Andando a fare su questo gruppo il
 test di Wilcoxon coppia a coppia con la correzione di Benjamini-Hochberg,
 i cui p-value sono riportati in Tab.~\ref{tab6} possiamo osservare come
-le differenze tra i vari anni siano generalizzate e non riguardino sono signole coppie 
+differenze significative si presentino in quasi ogni coppia di anni
+messa a confronto.
 \begin{table}[htbp]
     \caption{Test di Wilcoxon con correzione di Benjamini-Hochberg}
     \begin{center}
@@ -422,7 +435,7 @@ le differenze tra i vari anni siano generalizzate e non riguardino sono signole 
 
 Il primo e il secondo gruppo non rispettano le supposizioni per l'ANOVA a misure ripetute
 unicamente perché si allontanano dalla sfericità.
-Visti i risultati del test di Friedman, vediamo se l'ANOVA a misure ripetute li appoggia
+Visti i risultati del test di Friedman, vediamo se l'ANOVA a misure ripetute li conferma
 o meno.
 In Tab.~\ref{tab7} 
 \begin{table}[htbp]
@@ -439,24 +452,28 @@ In Tab.~\ref{tab7}
     \label{tab7}
     \end{center}
 \end{table}
-Vediamo come per entrambi i gruppi l'ANOVA ci dia un p-value superiore allo 0.05 (seppure molto
-vicino nel caso del primo gruppo), se avessimo avuto tutte e tre le supposizioni verificate
-ciò ci avrebbe portato ad accettare l'ipotesi nulla e quindi dire che nei diversi gruppi
-abbiamo le stesse distribuzioni, tuttavia, per quanto detto prima, questi risultati non sono
-significativi o utili ai fini della nostra analisi.
+Vediamo come per entrambi i gruppi l'ANOVA ci dia un p-value superiore allo 0.05,
+nel secondo gruppo, in cui accettiamo l'ipotesi nulla anche con il test di Friedman,
+otteniamo persino uno 0.652.
+Nel primo gruppo ci troviamo sopra la soglia con uno 0.0878, con ANOVA quindi
+accettiamo l'ipotesi nulla per cui, con Friedman, avevamo una fortissima evidenza contro.
+Data però la sfericità non rispettata, i risultati ottenuti con l'ANOVA sono molto
+meno significativi.
+
 
 \section{Conclusioni}
 
-Dall'analisi appena presentata si può ricavare in conclusione che è arduo
-affermare esistano paesi che nel corso degli anni vadano ad avere distribuzioni
-del tassi di suicidio statisticamente simili e, anche quando accade,
-rimane sempre il dubbio se ciò sia casuale e un cambio di singolo paese o intervallo
-temporale possa far cadere tutte le nostre supposizioni o se ci sia effettivamente una
-causalità sotto a livello sociale. Quel che possiamo dire per ora è che in certi
-casi, molto specifici, differenze significative non vengono riscontrate mentre in
-altrettanti casi, molto specifici anch'essi, tali differenze esistono.
-Il perché le sopracitate differenze esistano o meno in questi determinati frangenti
-rendono i risultati di questo studio una base per possibili studi futuri.
+Dall'analisi appena presentata possiamo osservare come, in determinati periodi di tempo
+e in determinati gruppi, in questo caso quello dei paesi più ricchi per ogni regione e
+quello dei paesi con tasso di suicidio più alto per ogni regione, non esistano differenze
+significative nella distribuzione del tasso dei suicidi.
+Tuttavia il semplice prendere in esame un altro intervallo di tempo o cambiare i gruppi
+semplicemente di un paese potrebbe dare risultati completamente diversi.
+Data la particolarità del fenomeno che può essere attribuito alle motivazioni più disparate,
+questa analisi si propone come base per studi futuri, magari andando ad unire questo dataset
+con altri dataset che descrivono fattori sociali o geopolitici che potrebbero
+essere caratterizzanti per quanto riguarda la distribuzione del tasso dei suicidi.
+
 
 \begin{thebibliography}{00}
     \bibitem{b1} Shneidman ES. ``The definition of suicide''. New York, NY and London: John Wiley and sons; 1985.
