@@ -121,7 +121,7 @@ selected_countries_5 <- sc_data_R %>%
 
 colnames(selected_countries_5) <- c("CountryCode", "Year", "Both")
 
-selected_countries <- selected_countries_4
+selected_countries <- selected_countries_1
 
 for (i in selected_years) {
   print(summary(selected_countries$Both[selected_countries$Year==i]))

@@ -32,7 +32,7 @@ la distribuzione del tasso di suicidi sia significativamente differente o meno,
 aprendo la strada a potenziali
 ipotesi su fenomeni globali che possano averne influenzato la tendenza.
 Tramite l'analisi di tre gruppi distinti è possibile osservare come una
-distribuzione comune emerga solo in pochi casi.
+distribuzione senza differenze significative emerga solo in pochi casi.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -163,8 +163,8 @@ per regione del mondo secondo la divisione del WHO in Fig.~\ref{4wrtrend}.
 Possiamo vedere come ci sia in tutte le regioni un trend comune di declino e persino
 alcuni trend di crescita e decrescita comuni (ad esempio nel 2008-2009).
 A questo punto ci si potrebbe chiedere se alcuni gruppi
-di paesi o persino le regioni globali vadano a condividere, anno per anno,
-la stessa distribuzione di tassi di suicidi. Andiamo ora ad analizzare
+di paesi o persino le regioni globali abbiano
+distribuzioni di tassi di suicidi senza differenze significative. Andiamo ora ad analizzare
 un primo gruppo, formato dalle sei regioni globali e dalle loro medie annuali
 e poi tre gruppi formati ognuno da sei paesi differenti selezionati con diversi criteri.
 Per semplificare l'analisi e ridurre il numero di grafici verranno presi in esame solo
@@ -206,7 +206,8 @@ Dati questi paesi osserviamo il BWPlot relativo in Fig.~\ref{7secondgroup}.
     \caption{BWPlot di Both anno per anno in ogni paese (2° gruppo)}
     \label{7secondgroup}
 \end{figure}
-Qua un trend comune è già più probabile, andremo a verificarlo in seguito.
+Qua un trend comune appare tra alcuni soggetti mentre tra altri appare di meno,
+in seguito verificheremo con un test consono se le distribuzioni differiscono significativamente o meno.
 Tramite gli otto QQ-Plot in Fig.~\ref{8secondqq}, uno per anno, si può osservare come, anche qua,
 sia molto probabile che i dati raccolti ogni anno seguano una distribuzione normale.
 \begin{figure}[htbp]
@@ -261,7 +262,7 @@ Dati questi paesi osserviamo il BWPlot relativo in Fig.~\ref{11fourthgroup}.
     \caption{BWPlot di Both anno per anno in ogni paese (4° gruppo)}
     \label{11fourthgroup}
 \end{figure}
-Qua un trend comune è già più probabile, andremo a verificarlo in seguito.
+Qua un trend comune è già più probabile.
 Nei QQ-Plot in Fig.~\ref{12fourthqq} vediamo come i dati non saranno
 probabilmente distribuiti normalmente negli anni.
 \begin{figure}[htbp]
@@ -273,8 +274,9 @@ probabilmente distribuiti normalmente negli anni.
 \section{Test statistici}
 
 Vogliamo verificare che, all'interno dei gruppi selezionati,
-in ogni anno i dati raccolti provengano dalla stessa distribuzione.
-Per fare ciò la scelta primaria è l'ANOVA a misure ripetute,
+i dati raccolti provengano da distribuzioni che non differiscono
+in maniera significativa.
+Per fare ciò una buona scelta è l'ANOVA a misure ripetute,
 tuttavia è necessario andare a verificare la normalità,
 l'omochedasticità e la sfericità delle misure, in caso
 anche una sola di queste assunzioni non venga rispettata occorre
@@ -387,8 +389,74 @@ Per i vari gruppi riportiamo, nella Tab.~\ref{tab5}, i risultati del test di Fri
     \label{tab5}
     \end{center}
 \end{table}
+Possiamo osservare come solo nel secondo e quarto gruppo il p-value supera il valore di 0.05
+e quindi possiamo accettare l'ipotesi nulla, ovvero quella per cui non esistono differenze
+statistiche significative all'interno di tali gruppi.
+Ciò andrebbe a confermare quel che si poteva leggermente intuire dai BWPlot mostrati per questi
+due gruppi.
+Nel primo gruppo, ovvero quello composto dalle sei WR e dai rispettivi tassi di suicidio medi per
+anno, il p-value è molto più basso rispetto agli altri, indice che
+le differenze significative esistono. Andando a fare su questo gruppo il
+test di Wilcoxon coppia a coppia con la correzione di Benjamini-Hochberg,
+i cui p-value sono riportati in Tab.~\ref{tab6} possiamo osservare come
+le differenze tra i vari anni siano generalizzate e non riguardino sono signole coppie 
+\begin{table}[htbp]
+    \caption{Test di Wilcoxon con correzione di Benjamini-Hochberg}
+    \begin{center}
+    \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    \textbf{Anni} & \textbf{2014} & \textbf{2015} & \textbf{2016} & \textbf{2017} & \textbf{2018} \\
+    \hline
+    \textbf{2015} & 0.438 & - & - & - & - \\ \hline
+    \textbf{2016} & 0.108 & 0.043 & - & - & - \\ \hline
+    \textbf{2017} & 0.078 & 0.043 & 0.438 & - & - \\ \hline
+    \textbf{2018} & 0.043 & 0.043 & 0.043 & 0.043 & - \\ \hline
+    \textbf{2019} & 0.043 & 0.043 & 0.043 & 0.043 & 0.043 \\ 
+    \hline
+    \end{tabular}
+    \label{tab6}
+    \end{center}
+\end{table}
 
+\subsection{ANOVA a misure ripetute}
 
+Il primo e il secondo gruppo non rispettano le supposizioni per l'ANOVA a misure ripetute
+unicamente perché si allontanano dalla sfericità.
+Visti i risultati del test di Friedman, vediamo se l'ANOVA a misure ripetute li appoggia
+o meno.
+In Tab.~\ref{tab7} 
+\begin{table}[htbp]
+    \caption{ANOVA a misure ripetute}
+    \begin{center}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Gruppo} & \textbf{F-value} & \textbf{p-value} \\
+    \hline
+    \textbf{Gruppo 1} & 4.482 & 0.0878 \\\cline{1-3}
+    \textbf{Gruppo 2} & 0.229 & 0.652 \\\cline{1-3}
+    \hline
+    \end{tabular}
+    \label{tab7}
+    \end{center}
+\end{table}
+Vediamo come per entrambi i gruppi l'ANOVA ci dia un p-value superiore allo 0.05 (seppure molto
+vicino nel caso del primo gruppo), se avessimo avuto tutte e tre le supposizioni verificate
+ciò ci avrebbe portato ad accettare l'ipotesi nulla e quindi dire che nei diversi gruppi
+abbiamo le stesse distribuzioni, tuttavia, per quanto detto prima, questi risultati non sono
+significativi o utili ai fini della nostra analisi.
+
+\section{Conclusioni}
+
+Dall'analisi appena presentata si può ricavare in conclusione che è arduo
+affermare esistano paesi che nel corso degli anni vadano ad avere distribuzioni
+del tassi di suicidio statisticamente simili e, anche quando accade,
+rimane sempre il dubbio se ciò sia casuale e un cambio di singolo paese o intervallo
+temporale possa far cadere tutte le nostre supposizioni o se ci sia effettivamente una
+causalità sotto a livello sociale. Quel che possiamo dire per ora è che in certi
+casi, molto specifici, differenze significative non vengono riscontrate mentre in
+altrettanti casi, molto specifici anch'essi, tali differenze esistono.
+Il perché le sopracitate differenze esistano o meno in questi determinati frangenti
+rendono i risultati di questo studio una base per possibili studi futuri.
 
 \begin{thebibliography}{00}
     \bibitem{b1} Shneidman ES. ``The definition of suicide''. New York, NY and London: John Wiley and sons; 1985.
