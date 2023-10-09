@@ -124,16 +124,19 @@ ggplot(data = sc_data_R, aes(x = factor(Year), y = Both)) +
   geom_boxplot() +
   labs(title = "Distribution of Both values by Year",
        x = "Year", y = "Both") +
-  theme_minimal()
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text = element_text(size = 11),
+        axis.title = element_text(size = 12))
 
 mean_gender <- sc_data_R %>%
   group_by(Year) %>%
   summarize(Mean_Both = mean(Both), Mean_Male = mean(Male), Mean_Female = mean(Female))
 
 ggplot(mean_gender, aes(x = Year)) +
-  geom_line(aes(y = Mean_Both, color = "Both")) +
-  geom_line(aes(y = Mean_Male, color = "Male")) +
-  geom_line(aes(y = Mean_Female, color = "Female")) +
+  geom_line(aes(y = Mean_Both, color = "Both"), size = 1.0) +
+  geom_line(aes(y = Mean_Male, color = "Male"), size = 1.0) +
+  geom_line(aes(y = Mean_Female, color = "Female"), size = 1.0) +
   labs(
     title = "Trend of Mean Suicide Rates Over the Years",
     x = "Year",
@@ -142,7 +145,9 @@ ggplot(mean_gender, aes(x = Year)) +
   ) +
   scale_color_manual(values = c("Both" = "black", "Male" = "blue", "Female" = "red")) +
   theme_minimal() +
-  ylim(0, 25)  # Set the y-axis limits
+  ylim(0, 25)  # Set the y-axis limits +
+  theme(axis.text = element_text(size = 11),  # Imposta la dimensione del testo sugli assi
+      axis.title = element_text(size = 12))
 
 top_10_countries <- sc_data_R %>%
   group_by(CountryCode) %>%
@@ -169,9 +174,12 @@ head(mean_wc)
 
 # Create a ggplot object with your dataset
 ggplot(data = mean_wc, aes(x = Year, y = Mean_Both, group = WorldRegion, color = WorldRegion)) +
-  geom_line() +
+  geom_line(size = 1.0) +
   labs(x = "Year", y = "Mean Both Value", title = "Trend of Mean Both Value by World Region") +
-  theme_minimal()
+  theme_minimal() +
+  theme(axis.text = element_text(size = 11),  # Imposta la dimensione del testo sugli assi
+        axis.title = element_text(size = 12), # Imposta la dimensione dei titoli degli assi
+        legend.text = element_text(size = 10))
 
 # Filtra il dataset solo per l'anno 2019
 data_2019 <- mean_wc[mean_wc$Year == 2019, ]
