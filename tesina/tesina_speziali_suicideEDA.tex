@@ -31,7 +31,7 @@ World Health Organization relativo al tasso di mortalità per suicidio standardi
 L'obiettivo di questa analisi è quello di esaminare se, in differenti paesi tra il 2014 e il 2019,
 la distribuzione del tasso di suicidi sia significativamente differente o meno,
 aprendo la strada a potenziali
-ipotesi su fenomeni globali che possano averne influenzato la tendenza.
+ipotesi su fenomeni globali che possono averne influenzato la tendenza.
 Tramite l'analisi di tre gruppi distinti è possibile osservare come una
 distribuzione senza differenze significative emerga solo in pochi casi.
 \end{abstract}
@@ -55,7 +55,7 @@ Tuttavia, nel lungo periodo possono verificarsi e si sono verificati grandi camb
 Nello studio che segue andremo ad osservare i cambiamenti nel tasso di suicidio 
 a livello mondiale tra il 2014 e il 2019 e verificare se è possibile affermare
 che non esistono differenze significative nella distribuzione tassi di suicidio
-tra paesi differenti.
+tra gruppi di paesi differenti.
 
 
 \section{Dataset}
@@ -74,7 +74,7 @@ I dati sono stati acquisiti attraverso il processo di censimento della popolazio
 registrazioni anagrafiche e l'analisi di certificati medici contenenti informazioni
 sulla causa dei decessi.
 Il dataset originale si compone di 10980 campioni e 34 feature,
-di cui molte con valori totalmente nulli o non importati ai fini della nostra analisi.
+di cui molte con valori totalmente nulli o non importanti ai fini della nostra analisi.
 
 \subsection{Modellazione del dataset}
 
@@ -82,12 +82,12 @@ Prima di iniziare con l'analisi esplorativa il dataset è stato ridotto di
 dimensione andando a prendere unicamente le feature d'interesse qui di seguito
 riportate:
 \begin{itemize}
-    \item \textbf{ParentLocation}, rinominato in \textbf{WorldRegion}: 
+    \item \textbf{ParentLocation}, rinominato in \textbf{WorldRegion} (WR): 
     indica l'area geografica a cui appartiene il paese relativo al dato
-    in esame secondo la divisione fatta dal WHO;
+    in esame secondo la divisione fatta dalla WHO;
     \item \textbf{SpatialDimValueCode}, rinominato in \textbf{CountryCode}: 
     indica il codice a tre lettere maiuscole associato al paese relativo
-    al dato in esame (es. Italia sarà associato ad ITA);
+    al dato in esame (es. ``Italia'' sarà associato ad ``ITA'');
     \item \textbf{Location}, rinominato in \textbf{Country}: 
     indica il nome del paese  relativo al dato in esame;
     \item \textbf{Period}, rinominato in \textbf{Year}: 
@@ -118,7 +118,7 @@ la struttura finale è di seguito riportata:
 
 In questa sezione di analisi esplorativa dei dati (EDA) andremo dapprima
 ad analizzare tramite strumenti di visualizzazione dei dati il quadro generale
-della situazione per poi soffermarci su cinque gruppi di ``soggetti''.
+della situazione per poi soffermarci su quattro gruppi di ``soggetti''.
 Vedremo in seguito con quale criterio sono stati selezionati e a quali
 conclusioni ci permettono di arrivare.
 
@@ -132,7 +132,7 @@ al sesso (Male e Female) di appartenenza tramite il boxplot in Fig.~\ref{1sex}.
     \label{1sex}
 \end{figure}
 In questo modo è possibile apprezzare come esista una notevole differenza
-nella distribuzione tra i sessi: è evidente come i soggetti maschili siano
+nella distribuzione tra i sessi: è evidente che i soggetti maschili siano
 i più colpiti da questo fenomeno.
 
 \begin{figure}[htbp]
@@ -140,9 +140,9 @@ i più colpiti da questo fenomeno.
     \caption{Lineplot del trend dei suicidi medi globali ogni anno}
     \label{2globtrend}
 \end{figure}
-Ciò è apprezzabile anche andando a vedere il trend globale dei valori medi
-dei tassi di suicidio ogni anno in Fig.~\ref{2globtrend}: il trend maschile
-si trova su valori significativamente più alti rispetto a quello femminile,
+Ciò è apprezzabile anche andando a vedere il trend globale del
+tasso medio dei suicidi ogni anno in Fig.~\ref{2globtrend}: il trend maschile
+si trova su valori significativamente più alti rispetto a quello femminile mentre
 il trend di Both si pone, prevedibilmente, a cavallo tra i due.
 
 Un'ulteriore osservazione che è possibile fare è
@@ -155,10 +155,10 @@ in Fig.~\ref{3boxyears}.
     \caption{Boxplot della distribuzione dei valori tra gli anni}
     \label{3boxyears}
 \end{figure}
-La differenza tra un anno gli adiacenti è poca ma esiste, nel corso del ventennio
+La differenza tra un anno e gli adiacenti è poca ma esiste, nel corso del ventennio
 in esame infatti la distribuzione cambia notevolmente.
 Andiamo infine ad analizzare il trend del tasso dei suicidi medio suddiviso
-per regione del mondo secondo la divisione del WHO in Fig.~\ref{4wrtrend}.
+per regione del mondo secondo la divisione della WHO in Fig.~\ref{4wrtrend}.
 
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=.5\textwidth]{img/4 - WRTrend2.png}}
@@ -170,7 +170,7 @@ Possiamo vedere come ci sia in tutte le regioni un trend comune di declino e per
 alcuni trend di crescita e decrescita comuni (ad esempio nel 2008-2009).
 A questo punto ci si potrebbe chiedere se alcuni gruppi
 di paesi o persino le regioni globali abbiano
-distribuzioni di tassi di suicidi senza differenze significative.
+distribuzioni di tassi di suicidi senza differenze significative tra loro.
 
 Andiamo ora ad analizzare
 un primo gruppo, formato dalle sei regioni globali e dalle loro medie annuali
@@ -189,7 +189,7 @@ valor medio di Both in ogni regione del mondo, anno per anno.
 Già dalla figura è possibile vedere che, a parte il declino globale, non viene seguito
 un vero e proprio trend comune.
 Tramite gli otto QQ-Plot in Fig.~\ref{6firstqq}, uno per anno, si può osservare come sia
-molto probabile che la media dei dati raccolti ogni anno seguano una distribuzione normale.
+molto probabile che le medie dei dati raccolti ogni anno seguano una distribuzione normale.
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=.5\textwidth]{img/6 - Firstqq.png}}
     \caption{QQ-Plot dei valori medi di Both negli anni presi in esame}
@@ -215,7 +215,8 @@ Dati questi paesi osserviamo il BWPlot relativo in Fig.~\ref{7secondgroup}.
     \label{7secondgroup}
 \end{figure}
 Qua un trend comune appare tra alcuni soggetti mentre tra altri appare di meno,
-in seguito verificheremo con un test consono se le distribuzioni differiscono significativamente o meno.
+in seguito verificheremo con un test consono se le distribuzioni differiscono significativamente
+tra di loro o meno.
 Tramite gli otto QQ-Plot in Fig.~\ref{8secondqq}, uno per anno, si può osservare come, anche qua,
 sia molto probabile che i dati raccolti ogni anno seguano una distribuzione normale.
 \begin{figure}[htbp]
@@ -283,7 +284,7 @@ probabilmente distribuiti normalmente negli anni.
 
 Vogliamo verificare che, all'interno dei gruppi selezionati,
 i dati raccolti provengano da distribuzioni che non differiscono
-in maniera significativa.
+in maniera significativa tra di loro.
 Per fare ciò una buona scelta è l'ANOVA a misure ripetute,
 tuttavia è necessario andare a verificare la normalità,
 l'omochedasticità e la sfericità delle misure, in caso
@@ -320,7 +321,7 @@ in quanto hanno tutti i p-value dei test relativi ai loro anni superiori al valo
 
 In quanto solo i primi due gruppi hanno dati distribuiti secondo una distribuzione normale
 andremo ad utilizzare il test di Bartlett solo su questi due, i risultati,
-riportati in Tab.~\ref{tab2} mostrano come entrambi rispettino l'omoschedasticità.
+riportati in Tab.~\ref{tab2}, mostrano come entrambi rispettino l'omoschedasticità.
 \begin{table}[htbp]
     \caption{Test di Bartlett}
     \begin{center}
@@ -356,8 +357,8 @@ Come si può vedere in Tab.~\ref{tab3}, anche loro sono omoschedastici.
 
 \subsection{Verifica della sfericità}
 
-Utilizzando la statistica di Greenhouse-Geisser verifichiamo che nessuno dei quattro gruppi
-soddisfa la sfericità in quanto i loro valori $\varepsilon$, riportati in Tab.~\ref{tab4},
+Utilizzando la statistica di Greenhouse-Geisser notiamo come nessuno dei quattro gruppi
+soddisfi la sfericità in quanto, i loro valori $\varepsilon$ riportati in Tab.~\ref{tab4},
 si allontanano troppo da 1.
 \begin{table}[htbp]
     \caption{Statistica di Greenhouse-Geisser}
@@ -409,7 +410,8 @@ Ciò andrebbe a confermare quel che si poteva leggermente intuire dai BWPlot mos
 due gruppi.
 Nel primo gruppo, ovvero quello composto dalle sei WR e dai rispettivi tassi di suicidio medi per
 anno, il p-value è molto più basso rispetto agli altri, indice che
-le differenze significative esistono. Andando a fare su questo gruppo il
+l'evidenza contro l'ipotesi per cui non ci sono differenze significative è forte.
+Andando a fare su questo gruppo il
 test di Wilcoxon coppia a coppia con la correzione di Benjamini-Hochberg,
 i cui p-value sono riportati in Tab.~\ref{tab6} possiamo osservare come
 differenze significative si presentino in quasi ogni coppia di anni
@@ -453,8 +455,8 @@ In Tab.~\ref{tab7}
     \label{tab7}
     \end{center}
 \end{table}
-Vediamo come per entrambi i gruppi l'ANOVA ci dia un p-value superiore allo 0.05,
-nel secondo gruppo, in cui accettiamo l'ipotesi nulla anche con il test di Friedman,
+si osserva come, per entrambi i gruppi, l'ANOVA ci dà un p-value superiore allo 0.05.
+Nel secondo gruppo, in cui accettiamo l'ipotesi nulla anche con il test di Friedman,
 otteniamo persino uno 0.652.
 Nel primo gruppo ci troviamo sopra la soglia con uno 0.0878, con ANOVA quindi
 accettiamo l'ipotesi nulla per cui, con Friedman, avevamo una fortissima evidenza contro.

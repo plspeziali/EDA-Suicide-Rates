@@ -104,7 +104,9 @@ ggplot(data = stacked_data, aes(x = ind, y = values, fill = ind)) +
        x = "Sex",
        y = "Value") +
   scale_fill_manual(values = c("Male" = "lightblue", "Female" = "pink")) +
-  theme_minimal() +  # Add a title
+  theme_minimal() +
+  theme(axis.text = element_text(size = 11),  # Imposta la dimensione del testo sugli assi
+        axis.title = element_text(size = 12)) +  # Add a title
   guides(fill = FALSE)  # Remove the legend
 
 # Female/Male values boxplot only for the latest year (2019)
@@ -144,10 +146,11 @@ ggplot(mean_gender, aes(x = Year)) +
     color = "Sex"
   ) +
   scale_color_manual(values = c("Both" = "black", "Male" = "blue", "Female" = "red")) +
-  theme_minimal() +
-  ylim(0, 25)  # Set the y-axis limits +
+  theme_minimal()+
   theme(axis.text = element_text(size = 11),  # Imposta la dimensione del testo sugli assi
-      axis.title = element_text(size = 12))
+        axis.title = element_text(size = 12), # Imposta la dimensione dei titoli degli assi
+        legend.text = element_text(size = 10)) +
+  ylim(0, 25)  # Set the y-axis limits 
 
 top_10_countries <- sc_data_R %>%
   group_by(CountryCode) %>%
