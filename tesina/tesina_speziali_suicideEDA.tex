@@ -53,7 +53,7 @@ di solito non ci sono grandi fluttuazioni. Si è tentati di affermare che
 il miglior predittore del tasso di suicidi nel breve periodo è il tasso di suicidi del passato.
 Tuttavia, nel lungo periodo possono verificarsi e si sono verificati grandi cambiamenti''.
 Nello studio che segue andremo ad osservare i cambiamenti nel tasso di suicidio 
-a livello mondiale tra il 2014 e il 2019 e verificare se è possibile affermare
+a livello mondiale tra il 2000 e il 2019 e verificare se è possibile affermare
 che non esistono differenze significative nella distribuzione tassi di suicidio
 tra gruppi di paesi differenti.
 
@@ -82,8 +82,8 @@ Prima di iniziare con l'analisi esplorativa il dataset è stato ridotto di
 dimensione andando a prendere unicamente le feature d'interesse qui di seguito
 riportate:
 \begin{itemize}
-    \item \textbf{ParentLocation}, rinominato in \textbf{WorldRegion} (WR): 
-    indica l'area geografica a cui appartiene il paese relativo al dato
+    \item \textbf{ParentLocation}, rinominato in \textbf{WorldRegion}: 
+    indica l'area geografica (World Region o WR) a cui appartiene il paese relativo al dato
     in esame secondo la divisione fatta dalla WHO;
     \item \textbf{SpatialDimValueCode}, rinominato in \textbf{CountryCode}: 
     indica il codice a tre lettere maiuscole associato al paese relativo
@@ -96,14 +96,14 @@ riportate:
     indica il sesso (Male, Female o Both Sexes)
     relativo al dato in esame;
     \item \textbf{FactValueNumeric}, rinominato in \textbf{Value}: 
-    tasso di suicidi registrato per quel sesso in quell'anno e in quel paese;
+    tasso di suicidi registrato per quel sesso in quell'anno e in quel paese.
 \end{itemize}
 Con le colonne sopracitate selezionate nel dataset non sono presenti
 valori nulli o non significativi.
 Successivamente il dataset è stato nuovamente modificato per
 avere un'unica entry per ogni anno relativo a un paese, suddividendo la feature Sex
-in tre feature diverse contenenti ognuna il valore associato nel campo Value,
-la struttura finale è di seguito riportata:
+in tre feature diverse contenenti ognuna il valore associato nel campo Value.
+La struttura finale del dataset, da 3660 campioni e 7 feature, è di seguito riportata:
 \begin{itemize}
     \item \textbf{WorldRegion};
     \item \textbf{CountryCode};
@@ -111,7 +111,7 @@ la struttura finale è di seguito riportata:
     \item \textbf{Year};
     \item \textbf{Male}: Value associato al tasso di suicidio maschile;
     \item \textbf{Female}: Value associato al tasso di suicidio femminile;
-    \item \textbf{Both}: Value associato al tasso di suicidio di entrambi i sessi;
+    \item \textbf{Both}: Value associato al tasso di suicidio di entrambi i sessi.
 \end{itemize}
 
 \section{Analisi esplorativa}
@@ -236,7 +236,7 @@ in assoluto sono:
     \item \textbf{Russian Federation} (RUS);
     \item \textbf{Eswatini} (SWZ);
     \item \textbf{Botswana} (BWA);
-    \item \textbf{Kiribati} (KIR); 
+    \item \textbf{Kiribati} (KIR). 
 \end{itemize}
 Dati questi paesi osserviamo il BWPlot relativo in Fig.~\ref{9thridgroup}.
 \begin{figure}[htbp]
@@ -263,7 +263,7 @@ WR d'appartenenza sono:
     \item \textbf{Russian Federation} (RUS) per Europe;
     \item \textbf{Somalia} (SOM) per Eastern Mediterranean;
     \item \textbf{Sri Lanka} (LKA) per South-East Asia;
-    \item \textbf{Kiribati} (KIR) per Western Pacific; 
+    \item \textbf{Kiribati} (KIR) per Western Pacific. 
 \end{itemize}
 Dati questi paesi osserviamo il BWPlot relativo in Fig.~\ref{11fourthgroup}.
 \begin{figure}[htbp]
