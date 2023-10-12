@@ -54,8 +54,8 @@ il miglior predittore del tasso di suicidi nel breve periodo è il tasso di suic
 Tuttavia, nel lungo periodo possono verificarsi e si sono verificati grandi cambiamenti''.
 Nello studio che segue andremo ad osservare i cambiamenti nel tasso di suicidio 
 a livello mondiale tra il 2000 e il 2019 e verificare se è possibile affermare
-che non esistono differenze significative nella distribuzione tassi di suicidio
-tra gruppi di paesi differenti.
+che non esistono differenze significative nella distribuzione dei tassi di suicidio
+tra le regioni globali e alcuni gruppi di paesi differenti.
 
 
 \section{Dataset}
@@ -65,44 +65,45 @@ tra gruppi di paesi differenti.
 Il dataset utilizzato proviene dal portale web della World Health Organization (WHO)
 ed ha come titolo ``Age-standardized suicide rates (per 100000 population)''\cite{b4}.
 Contiene dati riguardanti i tassi di suicidi in ogni paese dal 2000 al 2019 di soggetti
-maschili, femminili e di entrambi i sessi. Tali dati sono standardizzati
-prendendo in considerazione la distribuzione dell'età della popolazione del paese,
-è stato scelto questo dataset rispetto a ``Crude suicide rates (per 100000 population)''
+maschili, femminili e aggrrgsti per entrambi i sessi. Tali dati sono standardizzati
+prendendo in considerazione la distribuzione dell'età della popolazione del paese.
+\`E stato scelto questo dataset rispetto a ``Crude suicide rates (per 100000 population)''
 in quanto la standardizzazione rispetto all'età dà luogo a statistiche più rappresentative
 quando l'evento preso in considerazione non è raro\cite{b5}.
 I dati sono stati acquisiti attraverso il processo di censimento della popolazione,
 registrazioni anagrafiche e l'analisi di certificati medici contenenti informazioni
-sulla causa dei decessi.
+sulla causa del decesso.
 Il dataset originale si compone di 10980 campioni e 34 feature,
-di cui molte con valori totalmente nulli o non importanti ai fini della nostra analisi.
+di cui molte con valori totalmente nulli o non rilevanti ai fini della nostra analisi.
 
 \subsection{Modellazione del dataset}
 
-Prima di iniziare con l'analisi esplorativa il dataset è stato ridotto di
-dimensione andando a prendere unicamente le feature d'interesse qui di seguito
+Prima di avviare l'analisi esplorativa il dataset è stato ridotto di
+dimensione andando a selezionare unicamente le feature d'interesse qui di seguito
 riportate:
 \begin{itemize}
-    \item \textbf{ParentLocation}, rinominato in \textbf{WorldRegion}: 
+    \item \textbf{ParentLocation}, rinominato \textbf{WorldRegion}: 
     indica l'area geografica (World Region o WR) a cui appartiene il paese relativo al dato
-    in esame secondo la divisione fatta dalla WHO;
-    \item \textbf{SpatialDimValueCode}, rinominato in \textbf{CountryCode}: 
+    esaminato (secondo la divisione fatta dalla WHO);
+    \item \textbf{SpatialDimValueCode}, rinominato \textbf{CountryCode}: 
     indica il codice a tre lettere maiuscole associato al paese relativo
-    al dato in esame (es. ``Italia'' sarà associato ad ``ITA'');
-    \item \textbf{Location}, rinominato in \textbf{Country}: 
-    indica il nome del paese  relativo al dato in esame;
-    \item \textbf{Period}, rinominato in \textbf{Year}: 
-    anno in cui è stato registrato il dato in esame;
-    \item \textbf{Dim1}, rinominato in \textbf{Sex}: 
+    al dato esaminato (es. ``Italia'' sarà associato ad ``ITA'');
+    \item \textbf{Location}, rinominato \textbf{Country}: 
+    indica il nome del paese  relativo al dato esaminato;
+    \item \textbf{Period}, rinominato \textbf{Year}: 
+    anno in cui è stato registrato il dato esaminato;
+    \item \textbf{Dim1}, rinominato \textbf{Sex}: 
     indica il sesso (Male, Female o Both Sexes)
-    relativo al dato in esame;
-    \item \textbf{FactValueNumeric}, rinominato in \textbf{Value}: 
+    relativo al dato esaminato;
+    \item \textbf{FactValueNumeric}, rinominato \textbf{Value}: 
     tasso di suicidi registrato per quel sesso in quell'anno e in quel paese.
 \end{itemize}
-Con le colonne sopracitate selezionate nel dataset non sono presenti
-valori nulli o non significativi.
-Successivamente il dataset è stato nuovamente modificato per
-avere un'unica entry per ogni anno relativo a un paese, suddividendo la feature Sex
-in tre feature diverse contenenti ognuna il valore associato nel campo Value.
+Selezionando le colonne sopracitate non sono presenti
+valori nulli o non significativi all'interno del dataset.
+Successivamente il dataset è stato modificato per
+avere un'unica entry per ogni anno relativo a un paese;
+tale risultato è stato ottenuto suddividendo la feature Sex
+in tre feature differenti, contenenti ciascuna il valore associato nel campo Value.
 La struttura finale del dataset, da 3660 campioni e 7 feature, è di seguito riportata:
 \begin{itemize}
     \item \textbf{WorldRegion};
@@ -116,47 +117,48 @@ La struttura finale del dataset, da 3660 campioni e 7 feature, è di seguito rip
 
 \section{Analisi esplorativa}
 
-In questa sezione di analisi esplorativa dei dati (EDA) andremo dapprima
+In questa sezione di Explorative Data Analysis (EDA) andremo dapprima
 ad analizzare tramite strumenti di visualizzazione dei dati il quadro generale
-della situazione per poi soffermarci su quattro gruppi di ``soggetti''.
+della situazione, soffermandoci poi su quattro gruppi di soggetti statistici.
 
 \subsection{Il quadro generale}
 
 Inizialmente è stata studiata la distribuzione dei valori Sex rispetto
-al sesso (Male e Female) di appartenenza tramite il boxplot in Fig.~\ref{1sex}.
+(Male e Female) tramite il boxplot in Fig.~\ref{1sex}.
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=.5\textwidth]{img/1 - Sex2.png}}
     \caption{Boxplot della distribuzione dei valori rispetto al sesso}
     \label{1sex}
 \end{figure}
 In questo modo è possibile apprezzare come esista una notevole differenza
-nella distribuzione tra i sessi: è evidente che i soggetti maschili siano
-i più colpiti da questo fenomeno.
+nella distribuzione tra i sessi: è evidente che gli individui maschili compiono
+con maggiore frequenza atti suicidari.
 
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=.5\textwidth]{img/2 - Globtrend2.png}}
     \caption{Lineplot del trend dei suicidi medi globali ogni anno}
     \label{2globtrend}
 \end{figure}
-Ciò è apprezzabile anche andando a vedere il trend globale del
-tasso medio dei suicidi ogni anno in Fig.~\ref{2globtrend}: il trend maschile
-si trova su valori significativamente più alti rispetto a quello femminile mentre
-il trend di Both si pone, prevedibilmente, a cavallo tra i due.
+Ciò è constatabile anche osservando il trend globale del
+tasso medio dei suicidi ogni anno riportato in Fig.~\ref{2globtrend}: il trend maschile
+si attesta su valori significativamente più alti rispetto a quello femminile, mentre
+il trend di Both esibisce un andamento intermedio tra i valori dei due sessi.
 
-Un'ulteriore osservazione che è possibile fare è
-che, nonostante il trend globale sia in declino, non c'è una differenza
-particolarmente significativa da anno ad anno. Possiamo apprezzare meglio
-ciò osservando la distribuzione dei valori anno per anno tramite il boxplot
+Si può inoltre osservare
+che, nonostante il trend globale sia in declino, non c'è alcuna differenza
+statisticamente significativa tra un anno e il successivo.
+Possiamo apprezzare meglio questo andamento 
+osservando la distribuzione dei valori anno per anno tramite il boxplot
 in Fig.~\ref{3boxyears}.
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=.5\textwidth]{img/3 - Boxyears2.png}}
     \caption{Boxplot della distribuzione dei valori tra gli anni}
     \label{3boxyears}
 \end{figure}
-La differenza tra un anno e gli adiacenti è poca ma esiste, nel corso del ventennio
-in esame infatti la distribuzione cambia notevolmente.
-Andiamo infine ad analizzare il trend del tasso dei suicidi medio suddiviso
-per regione del mondo secondo la divisione della WHO in Fig.~\ref{4wrtrend}.
+La differenza tra ciascun anno e il successivo è esigua ma ciononostante rilevabile: nel corso del ventennio
+in esame, infatti, la distribuzione cambia notevolmente.
+Andiamo infine ad analizzare il trend del tasso medio dei suicidi suddiviso
+per regione del mondo secondo la ripartizione della WHO in Fig.~\ref{4wrtrend}.
 
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=.5\textwidth]{img/4 - WRTrend2.png}}
@@ -164,16 +166,19 @@ per regione del mondo secondo la divisione della WHO in Fig.~\ref{4wrtrend}.
     \label{4wrtrend}
 \end{figure}
 
-Possiamo vedere come ci sia in tutte le regioni un trend comune di declino e persino
-alcuni trend di crescita e decrescita comuni (ad esempio nel 2008-2009).
+In ogni regione è possibile osservare una comune tendenza negativa
+del tasso dei suicidi, e la sostanziale consonanza degli andamenti statistici
+è rilevabile anche nella sincrona presenza di eventi localizzati di crescita
+(ad esempio nel 2008-2009) e decrescita.
 A questo punto ci si potrebbe chiedere se alcuni gruppi
-di paesi o persino le regioni globali abbiano
-distribuzioni di tassi di suicidi senza differenze significative tra loro.
+di paesi o persino le regioni globali presentino
+distribuzioni dei tassi di suicidi nel corso degli anni
+senza differenze significative tra loro.
 
-Andiamo ora ad analizzare
-un primo gruppo, formato dalle sei regioni globali e dalle loro medie annuali
-e poi tre gruppi formati ognuno da sei paesi differenti selezionati con diversi criteri.
-Per semplificare l'analisi e ridurre il numero di grafici verranno presi in esame solo
+Al fine di articolare tale questione procederemo ora con l'analisi di
+un primo gruppo di soggetti, formato dalle sei regioni globali e dalle loro medie annuali,
+e poi di tre gruppi formati ognuno da sei paesi selezionati con diversi criteri.
+Per semplificare l'analisi e ridurre il numero di rappresentazioni grafiche verranno presi in esame solo
 gli anni dal 2014 al 2019.
 
 \subsection{Primo gruppo - Regioni globali (WR)}
@@ -184,8 +189,9 @@ valor medio di Both in ogni regione del mondo, anno per anno.
     \caption{BWPlot della media di Both anno per anno in ogni regione}
     \label{5firstgroup}
 \end{figure}
-Già dalla figura è possibile vedere che, a parte il declino globale, non viene seguito
-un vero e proprio trend comune.
+Già dalla figura è possibile notare che, eccezione fatta per il declino generale
+precedentemente discusso, non è rilevabile
+alcun trend comune.
 Tramite gli otto QQ-Plot in Fig.~\ref{6firstqq}, uno per anno, si può osservare come sia
 molto probabile che le medie dei dati raccolti ogni anno seguano una distribuzione normale.
 \begin{figure}[htbp]
@@ -196,7 +202,7 @@ molto probabile che le medie dei dati raccolti ogni anno seguano una distribuzio
 
 \subsection{Secondo gruppo - Paese con PIL più alto per WR}
 
-I paesi individuati come quelli con il PIL maggiore \cite{b6} per la WR
+I paesi individuati come quelli con il PIL maggiore \cite{b6} all'interno della WR
 d'appartenenza nel 2019 sono:
 \begin{itemize}
     \item \textbf{United States of America} (USA) per Americas;
@@ -206,17 +212,18 @@ d'appartenenza nel 2019 sono:
     \item \textbf{Nigeria} (NGA) per Africa;
     \item \textbf{India} (IND) per South-East Asia. 
 \end{itemize}
-Dati questi paesi osserviamo il BWPlot relativo in Fig.~\ref{7secondgroup}.
+Osserviamo dunque il BWPlot relativo in Fig.~\ref{7secondgroup}.
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=.5\textwidth]{img/7 - Secondgroup.png}}
     \caption{BWPlot di Both anno per anno in ogni paese (2° gruppo)}
     \label{7secondgroup}
 \end{figure}
-Qua un trend comune appare tra alcuni soggetti mentre tra altri appare di meno,
-in seguito verificheremo con un test consono se le distribuzioni differiscono significativamente
+\`E rilevabile un trend comune ad alcuni soggetti (ad es. NGA e CHN) mentre, prendendone
+in considerazione altri (ad es. USA e IND) la consonanza è esigua.
+In seguito verificheremo con un test opportuno se le distribuzioni differiscono significativamente
 tra di loro o meno.
-Tramite gli otto QQ-Plot in Fig.~\ref{8secondqq}, uno per anno, si può osservare come, anche qua,
-sia molto probabile che i dati raccolti ogni anno seguano una distribuzione normale.
+Tramite gli otto QQ-Plot in Fig.~\ref{8secondqq}, uno per anno, si può osservare come, anche in questo caso,
+sia molto probabile che i dati raccolti annualmente seguano una distribuzione normale.
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=.5\textwidth]{img/8 - Secondqq.png}}
     \caption{QQ-Plot dei valori Both negli anni presi in esame (2° gruppo)}
@@ -236,15 +243,15 @@ in assoluto sono:
     \item \textbf{Botswana} (BWA);
     \item \textbf{Kiribati} (KIR). 
 \end{itemize}
-Dati questi paesi osserviamo il BWPlot relativo in Fig.~\ref{9thridgroup}.
+Osserviamone il BWPlot in Fig.~\ref{9thridgroup}:
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=.5\textwidth]{img/9 - Thirdgroup.png}}
     \caption{BWPlot di Both anno per anno in ogni paese (3° gruppo)}
     \label{9thridgroup}
 \end{figure}
-Qua è difficile individuare un trend comune.
-Nei QQ-Plot in Fig.~\ref{10thirdqq} vediamo come i dati non saranno
-probabilmente distribuiti normalmente negli anni.
+notiamo che un trend comune è difficile individuabile.
+Riferendoci ai QQ-Plot in Fig.~\ref{10thirdqq} possiamo supporre che i dati non siano
+distribuiti normalmente negli anni, andremo poi a verificare tale ipotesi nel IV paragrafo.
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=.5\textwidth]{img/10 - Thirdqq.png}}
     \caption{QQ-Plot dei valori Both negli anni presi in esame (3° gruppo)}
@@ -253,7 +260,7 @@ probabilmente distribuiti normalmente negli anni.
 
 \subsection{Quarto gruppo - Paesi con tasso di suicidio più alto per WR}
 
-I paesi individuati come quelli con il tasso di suicidio più alto per la
+I paesi on il tasso di suicidio più alto per la
 WR d'appartenenza sono:
 \begin{itemize}
     \item \textbf{Lesotho} (LSO) per Africa;
@@ -263,15 +270,15 @@ WR d'appartenenza sono:
     \item \textbf{Sri Lanka} (LKA) per South-East Asia;
     \item \textbf{Kiribati} (KIR) per Western Pacific. 
 \end{itemize}
-Dati questi paesi osserviamo il BWPlot relativo in Fig.~\ref{11fourthgroup}.
+Relativamente a questi paesi osserviamo il BWPlot in Fig.~\ref{11fourthgroup}.
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=.5\textwidth]{img/11 - Fourthgroup.png}}
     \caption{BWPlot di Both anno per anno in ogni paese (4° gruppo)}
     \label{11fourthgroup}
 \end{figure}
-Qua un trend comune è già più probabile.
-Nei QQ-Plot in Fig.~\ref{12fourthqq} vediamo come i dati non saranno
-probabilmente distribuiti normalmente negli anni.
+Possiamo notare un trend comune.
+Riferendoci ai QQ-Plot in Fig.~\ref{12fourthqq} possiamo supporre che i dati non siano
+distribuiti normalmente negli anni, andremo poi a verificare tale ipotesi nel IV paragrafo.
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=.5\textwidth]{img/12 - Fourthqq.png}}
     \caption{QQ-Plot dei valori Both negli anni presi in esame (4° gruppo)}
@@ -280,22 +287,24 @@ probabilmente distribuiti normalmente negli anni.
 
 \section{Test statistici}
 
-Vogliamo verificare che, all'interno dei gruppi selezionati,
-i dati raccolti provengano da distribuzioni che non differiscono
+Si intende verificare che, all'interno dei gruppi selezionati,
+i dati raccolti provengono di anno in anno da distribuzioni che non differiscono
 in maniera significativa tra di loro.
-Per fare ciò una buona scelta è l'ANOVA a misure ripetute,
-tuttavia è necessario andare a verificare la normalità,
-l'omochedasticità e la sfericità delle misure, in caso
+A tal fine, l'ANOVA a misure ripetute è il test più idoneo,
+per il quale è tuttavia necessario andare a verificare la normalità,
+l'omochedasticità e la sfericità delle misure.
+Nell'eventualità in cui
 anche una sola di queste assunzioni non venga rispettata occorre
-ripiegare sul test non parametrico di Friedman.
+ricorrere sul test non parametrico di Friedman.
 
 \subsection{Verifica della normalità}
 
 Le supposizioni sulla normalità dei dati vengono confermate
 con il test di Shapiro-Wilk, i cui p-value vengono riportati nella Tab.~\ref{tab1}.
-Solo i primi due gruppi presi in esame (gruppo delle medie delle WR e dei paesi con PIL più alto per WR)
-infatti rispettano il vincolo della normalità
-in quanto hanno tutti i p-value dei test relativi ai loro anni superiori al valore di 0.05.
+Solo i primi due gruppi presi in esame,
+(gruppo delle medie delle WR e dei paesi con PIL più alto per WR)
+infatti, rispettano il vincolo della normalità,
+in quanto hanno tutti i p-value dei test relativi ai loro anni superiori a 0.05.
 \begin{table}[htbp]
     \caption{Test di Shapiro-Wilk}
     \begin{center}
@@ -317,7 +326,7 @@ in quanto hanno tutti i p-value dei test relativi ai loro anni superiori al valo
 
 \subsection{Verifica dell'omoschedasticità}
 
-In quanto solo i primi due gruppi hanno dati distribuiti secondo una distribuzione normale
+Poiché solo i primi due gruppi hanno dati distribuiti secondo una distribuzione normale
 andremo ad utilizzare il test di Bartlett solo su questi due, i risultati,
 riportati in Tab.~\ref{tab2}, mostrano come entrambi rispettino l'omoschedasticità.
 \begin{table}[htbp]
@@ -335,9 +344,9 @@ riportati in Tab.~\ref{tab2}, mostrano come entrambi rispettino l'omoschedastici
     \end{center}
 \end{table}
 
-Discorso analogo possiamo fare per gli ultimi due gruppi per cui è stato utilizzato il test di
+\`E possibile fare un discorso analogo per gli ultimi due gruppi per cui è stato utilizzato il test di
 Levene, più robusto rispetto a Bartlett nel caso di allontanamento dalla normalità.
-Come si può vedere in Tab.~\ref{tab3}, anche loro sono omoschedastici.
+Come si può notare in Tab.~\ref{tab3}, anche loro sono omoschedastici.
 \begin{table}[htbp]
     \caption{Test di Levene}
     \begin{center}
@@ -356,7 +365,7 @@ Come si può vedere in Tab.~\ref{tab3}, anche loro sono omoschedastici.
 \subsection{Verifica della sfericità}
 
 Utilizzando la statistica di Greenhouse-Geisser notiamo come nessuno dei quattro gruppi
-soddisfi la sfericità in quanto, i loro valori $\varepsilon$ riportati in Tab.~\ref{tab4},
+soddisfa la sfericità, in quanto i loro valori $\varepsilon$ riportati in Tab.~\ref{tab4},
 si allontanano troppo da 1.
 \begin{table}[htbp]
     \caption{Statistica di Greenhouse-Geisser}
@@ -374,9 +383,9 @@ si allontanano troppo da 1.
     \label{tab4}
     \end{center}
 \end{table}
-Possiamo però pensare di utilizzare comunque ANOVA per i primi due gruppi
-che soddisfano sia normalità che omoschedasticità, almeno per vedere
-se essa conferma Friedman o meno (in ogni caso, sarà il test di Friedman
+Possiamo però valutare di utilizzare comunque ANOVA per i primi due gruppi
+che soddisfano sia normalità che omoschedasticità, per
+accertare se conferma il test di Friedman o meno (in ogni caso, sarà il test di Friedman
 quello che considereremo significativo).
 
 \subsection{Test di Friedman}
@@ -399,20 +408,21 @@ Per i vari gruppi riportiamo, nella Tab.~\ref{tab5}, i risultati del test di Fri
     \end{center}
 \end{table}
 Possiamo osservare come solo nel secondo e quarto gruppo 
-(ovvero quello dei paesi con PIL più alto per WR e paesi con
+(ovvero quello dei paesi con PIL più alto per WR e dei paesi con tasso di
 suicidio più alto per WR)
-il p-value supera il valore di 0.05
-e quindi possiamo accettare l'ipotesi nulla, ovvero quella per cui non esistono differenze
+il p-value supera 0.05
+e possiamo dunque accettare l'ipotesi nulla, ovvero sia quella per cui non esistono differenze
 statistiche significative all'interno di tali gruppi.
-Ciò andrebbe a confermare quel che si poteva leggermente intuire dai BWPlot mostrati per questi
+Ciò va a confermare quello che si poteva intuire dai BWPlot riportati per questi
 due gruppi.
-Nel primo gruppo, ovvero quello composto dalle sei WR e dai rispettivi tassi di suicidio medi per
-anno, il p-value è molto più basso rispetto agli altri, indice che
-l'evidenza contro l'ipotesi per cui non ci sono differenze significative è forte.
-Andando a fare su questo gruppo il
+Nel primo gruppo, ovvero quello composto dalle sei WR e dai rispettivi tassi medi di suicidio per
+anno, il p-value è molto più basso rispetto agli altri, indice del fatto che,
+contro l'ipotesi dell'assenza di differenze significative,
+abbiamo una forte evidenza.
+Effettuando su questo gruppo il
 test di Wilcoxon coppia a coppia con la correzione di Benjamini-Hochberg,
-i cui p-value sono riportati in Tab.~\ref{tab6} possiamo osservare come
-differenze significative si presentino in quasi ogni coppia di anni
+i cui p-value sono riportati in Tab.~\ref{tab6}, possiamo osservare la presenza
+di differenze significative in quasi ogni coppia di anni
 messa a confronto.
 \begin{table}[htbp]
     \caption{Test di Wilcoxon con correzione di Benjamini-Hochberg}
@@ -436,7 +446,7 @@ messa a confronto.
 
 Il primo e il secondo gruppo non rispettano le supposizioni per l'ANOVA a misure ripetute
 unicamente perché si allontanano dalla sfericità.
-Visti i risultati del test di Friedman, vediamo se l'ANOVA a misure ripetute li conferma
+Visti i risultati del test di Friedman, controlliamo se l'ANOVA a misure ripetute li conferma
 o meno.
 In Tab.~\ref{tab7} 
 \begin{table}[htbp]
@@ -453,28 +463,29 @@ In Tab.~\ref{tab7}
     \label{tab7}
     \end{center}
 \end{table}
-si osserva come, per entrambi i gruppi, l'ANOVA ci dà un p-value superiore allo 0.05.
+si riporta che, per entrambi i gruppi, l'ANOVA ci restituisce un p-value superiore allo 0.05.
 Nel secondo gruppo, in cui accettiamo l'ipotesi nulla anche con il test di Friedman,
-otteniamo persino uno 0.652.
-Nel primo gruppo ci troviamo sopra la soglia con uno 0.0878, con ANOVA quindi
-accettiamo l'ipotesi nulla per cui, con Friedman, avevamo una fortissima evidenza contro.
-Data però la sfericità non rispettata, i risultati ottenuti con l'ANOVA sono molto
+otteniamo persino 0.652.
+Il primo gruppo si attesta sopra la soglia con 0.0878, utilizzando ANOVA accettiamo quindi
+l'ipotesi nulla per la quale, riferendoci invece a Friedman, vi erano fortissime evidenze contrarie.
+Considerando però la sfericità non rispettata, i risultati ottenuti con l'ANOVA sono molto
 meno significativi.
 
 
 \section{Conclusioni}
 
-Dall'analisi appena presentata possiamo osservare come, in determinati periodi di tempo
-e in determinati gruppi, in questo caso quello dei paesi più ricchi per ogni regione e
-quello dei paesi con tasso di suicidio più alto per ogni regione, non esistano differenze
-significative nella distribuzione del tasso dei suicidi.
-Tuttavia, anche solo il prendere in esame due gruppi con quattro paesi uguali
-ma due diversi ci restituisce risultati completamente differenti (ad esempio quanto
-visto col terzo e quarto gruppo).
-Data la particolarità del fenomeno che può essere attribuito alle motivazioni più disparate,
-questa analisi si propone come base per studi futuri, magari andando ad unire questo dataset
-con altri dataset che descrivono fattori sociali o geopolitici che potrebbero
-essere caratterizzanti per quanto riguarda la distribuzione del tasso dei suicidi.
+Nell'analisi appena presentata è possibile osservare come, in determinati periodi di tempo
+e in determinati gruppi, nello specifico quello dei paesi con PIL più alto per WR e
+quello dei paesi con tasso di suicidio più alto per WR, non esistono differenze
+significative nella distribuzione anno per anno del tasso dei suicidi.
+Tuttavia, anche solo prendendo in esame due gruppi statistici che condividono quattro paesi
+di riferimento e differiscono per due, otteniamo risultati completamente differenti
+(come rilevato con il terzo e il quarto gruppo).
+Considerando la particolarità del fenomeno, la cui causa può essere individuata nelle motivazioni più disparate,
+la presente analisi si propone come base per studi futuri, i quali potrebbero
+unire il dataset in esame
+con altri atti a descrivere fattori sociali, economici o geopolitici potenzialmente
+influenti sulla distribuzione del tasso dei suicidi.
 
 
 \begin{thebibliography}{00}
