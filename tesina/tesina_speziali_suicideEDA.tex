@@ -28,11 +28,11 @@ paolo.speziali@studenti.unipg.it}
 \begin{abstract}
 Questo documento riporta i risultati dell'analisi esplorativa del dataset fornito dalla
 World Health Organization relativo al tasso di mortalità per suicidio standardizzato per età.
-L'obiettivo di questa analisi è quello di esaminare se, in differenti paesi tra il 2014 e il 2019,
-la distribuzione del tasso di suicidi sia significativamente differente o meno,
+L'obiettivo di questa analisi è quello di esaminare se, in differenti paesi nel corso degli anni,
+la distribuzione annuale del tasso di suicidi sia significativamente differente o meno,
 aprendo la strada a potenziali
 ipotesi su fenomeni globali che possono averne influenzato la tendenza.
-Tramite l'analisi di tre gruppi distinti è possibile osservare come una
+Tramite l'analisi di quattro gruppi di soggetti è possibile osservare come una
 distribuzione senza differenze significative emerga solo in pochi casi.
 \end{abstract}
 
@@ -54,7 +54,7 @@ il miglior predittore del tasso di suicidi nel breve periodo è il tasso di suic
 Tuttavia, nel lungo periodo possono verificarsi e si sono verificati grandi cambiamenti''.
 Nello studio che segue andremo ad osservare i cambiamenti nel tasso di suicidio 
 a livello mondiale tra il 2000 e il 2019 e verificare se è possibile affermare
-che non esistono differenze significative nella distribuzione dei tassi di suicidio
+che non esistono differenze significative nella distribuzione annuale dei tassi di suicidio
 tra le regioni globali e alcuni gruppi di paesi differenti.
 
 
@@ -172,9 +172,8 @@ del tasso dei suicidi, e la sostanziale consonanza degli andamenti statistici
 (ad esempio nel 2008-2009) e decrescita.
 A questo punto ci si potrebbe chiedere se alcuni gruppi
 di paesi o persino le regioni globali presentino
-distribuzioni dei tassi di suicidi nel corso degli anni
+distribuzioni annuali dei tassi di suicidi
 senza differenze significative tra loro.
-
 Al fine di articolare tale questione procederemo ora con l'analisi di
 un primo gruppo di soggetti, formato dalle sei regioni globali e dalle loro medie annuali,
 e poi di tre gruppi formati ognuno da sei paesi selezionati con diversi criteri.
@@ -192,13 +191,15 @@ valor medio di Both in ogni regione del mondo, anno per anno.
 Già dalla figura è possibile notare che, eccezione fatta per il declino generale
 precedentemente discusso, non è rilevabile
 alcun trend comune.
-Tramite gli otto QQ-Plot in Fig.~\ref{6firstqq}, uno per anno, si può osservare come sia
-molto probabile che le medie dei dati raccolti ogni anno seguano una distribuzione normale.
+Tramite gli otto QQ-Plot in Fig.~\ref{6firstqq},
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=.5\textwidth]{img/6 - Firstqq.png}}
     \caption{QQ-Plot dei valori medi di Both negli anni presi in esame}
     \label{6firstqq}
 \end{figure}
+uno per anno, si può osservare come sia
+molto probabile che le medie dei dati raccolti ogni anno seguano una distribuzione normale.
+
 
 \subsection{Secondo gruppo - Paese con PIL più alto per WR}
 
@@ -222,13 +223,15 @@ Osserviamo dunque il BWPlot relativo in Fig.~\ref{7secondgroup}.
 in considerazione altri (ad es. USA e IND) la consonanza è esigua.
 In seguito verificheremo con un test opportuno se le distribuzioni differiscono significativamente
 tra di loro o meno.
-Tramite gli otto QQ-Plot in Fig.~\ref{8secondqq}, uno per anno, si può osservare come, anche in questo caso,
-sia molto probabile che i dati raccolti annualmente seguano una distribuzione normale.
+Tramite gli otto QQ-Plot in Fig.~\ref{8secondqq},
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=.5\textwidth]{img/8 - Secondqq.png}}
     \caption{QQ-Plot dei valori Both negli anni presi in esame (2° gruppo)}
     \label{8secondqq}
 \end{figure}
+uno per anno, si può osservare come, anche in questo caso,
+sia molto probabile che i dati raccolti annualmente seguano una distribuzione normale.
+
 
 
 \subsection{Terzo gruppo - Paesi con tasso di suicidio più alto in assoluto}
@@ -251,7 +254,7 @@ Osserviamone il BWPlot in Fig.~\ref{9thridgroup}:
 \end{figure}
 notiamo che un trend comune è difficile individuabile.
 Riferendoci ai QQ-Plot in Fig.~\ref{10thirdqq} possiamo supporre che i dati non siano
-distribuiti normalmente negli anni, andremo poi a verificare tale ipotesi nel IV paragrafo.
+distribuiti normalmente negli anni, andremo poi a verificare tale ipotesi nella sezione IV.
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=.5\textwidth]{img/10 - Thirdqq.png}}
     \caption{QQ-Plot dei valori Both negli anni presi in esame (3° gruppo)}
@@ -278,7 +281,7 @@ Relativamente a questi paesi osserviamo il BWPlot in Fig.~\ref{11fourthgroup}.
 \end{figure}
 Possiamo notare un trend comune.
 Riferendoci ai QQ-Plot in Fig.~\ref{12fourthqq} possiamo supporre che i dati non siano
-distribuiti normalmente negli anni, andremo poi a verificare tale ipotesi nel IV paragrafo.
+distribuiti normalmente negli anni, andremo poi a verificare tale ipotesi nella sezione IV.
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=.5\textwidth]{img/12 - Fourthqq.png}}
     \caption{QQ-Plot dei valori Both negli anni presi in esame (4° gruppo)}
@@ -288,7 +291,7 @@ distribuiti normalmente negli anni, andremo poi a verificare tale ipotesi nel IV
 \section{Test statistici}
 
 Si intende verificare che, all'interno dei gruppi selezionati,
-i dati raccolti provengono di anno in anno da distribuzioni che non differiscono
+i dati raccolti provengono ogni anno da distribuzioni che non differiscono
 in maniera significativa tra di loro.
 A tal fine, l'ANOVA a misure ripetute è il test più idoneo,
 per il quale è tuttavia necessario andare a verificare la normalità,
@@ -416,7 +419,7 @@ statistiche significative all'interno di tali gruppi.
 Ciò va a confermare quello che si poteva intuire dai BWPlot riportati per questi
 due gruppi.
 Nel primo gruppo, ovvero quello composto dalle sei WR e dai rispettivi tassi medi di suicidio per
-anno, il p-value è molto più basso rispetto agli altri, indice del fatto che,
+anno, il p-value è estremamente basso, indice del fatto che,
 contro l'ipotesi dell'assenza di differenze significative,
 abbiamo una forte evidenza.
 Effettuando su questo gruppo il
@@ -477,7 +480,7 @@ meno significativi.
 Nell'analisi appena presentata è possibile osservare come, in determinati periodi di tempo
 e in determinati gruppi, nello specifico quello dei paesi con PIL più alto per WR e
 quello dei paesi con tasso di suicidio più alto per WR, non esistono differenze
-significative nella distribuzione anno per anno del tasso dei suicidi.
+significative nella distribuzione annuale del tasso dei suicidi.
 Tuttavia, anche solo prendendo in esame due gruppi statistici che condividono quattro paesi
 di riferimento e differiscono per due, otteniamo risultati completamente differenti
 (come rilevato con il terzo e il quarto gruppo).
