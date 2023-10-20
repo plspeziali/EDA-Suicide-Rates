@@ -1,5 +1,0 @@
-\beamer@sectionintoc {1}{Introduzione}{2}{0}{1}
-\beamer@sectionintoc {2}{Dataset}{4}{0}{2}
-\beamer@sectionintoc {3}{Analisi Esplorativa dei Dati (EDA)}{8}{0}{3}
-\beamer@sectionintoc {4}{Test Statistici}{16}{0}{4}
-\beamer@sectionintoc {5}{Conclusioni}{24}{0}{5}
